@@ -15,7 +15,14 @@ export default class MainScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("background", "/assets/test-background.png");
+    //tiles
+    this.load.image("livingRoomTiles", "/assets/tiles/living-room-tilemap.png");
+    this.load.tilemapTiledJSON(
+      "livingRoomMap",
+      "assets/tiles/living-room.json"
+    );
+
+    //hero cat
     this.load.spritesheet(
       "catWalkDown",
       "/assets/cat-walk-down.png",
@@ -56,9 +63,22 @@ export default class MainScene extends Phaser.Scene {
   }
 
   create() {
-    this.add.image(0, 0, "background").setOrigin(0, 0);
+    const map = this.make.tilemap({ key: "livingRoomMap" });
+    const tileset = map.addTilesetImage("living-room", "livingRoomTiles");
+
+    if (!tileset) {
+      throw new Error("Tileset not found!");
+    }
+
+    const layer = map.createLayer("living-room", tileset, 0, 0);
+
+    if (!layer) {
+      throw new Error("Tileset not found!");
+    }
+    layer.setCollisionByProperty({ isCollide: true });
 
     this.hero = new Hero(this, 400, 300);
+    this.physics.add.collider(this.hero.getSprite(), layer);
 
     setupCamera(this, this.hero.getSprite(), { width: 1040, height: 704 });
   }
