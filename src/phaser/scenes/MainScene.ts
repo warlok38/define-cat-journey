@@ -70,15 +70,22 @@ export default class MainScene extends Phaser.Scene {
       throw new Error("Tileset not found!");
     }
 
-    const layer = map.createLayer("living-room", tileset, 0, 0);
+    const livingRoomLayer = map.createLayer("living-room", tileset, 0, 0);
+    const collisionsLayer = map.createLayer("walls", tileset, 0, -20);
 
-    if (!layer) {
-      throw new Error("Tileset not found!");
+    if (!livingRoomLayer) {
+      throw new Error("livingRoomLayer not found!");
     }
-    layer.setCollisionByProperty({ isCollide: true });
+    livingRoomLayer.setCollisionByProperty({ isCollide: true });
 
-    this.hero = new Hero(this, 400, 300);
-    this.physics.add.collider(this.hero.getSprite(), layer);
+    if (!collisionsLayer) {
+      throw new Error("livingRoomLayer not found!");
+    }
+    collisionsLayer.setCollisionByProperty({ isCollide: true });
+
+    this.hero = new Hero(this, 200, 200);
+    this.physics.add.collider(this.hero.getSprite(), livingRoomLayer);
+    this.physics.add.collider(this.hero.getSprite(), collisionsLayer);
 
     setupCamera(this, this.hero.getSprite(), { width: 1040, height: 704 });
   }

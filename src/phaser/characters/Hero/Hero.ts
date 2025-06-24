@@ -12,7 +12,7 @@ export class Hero {
 
     // Игрок
     this.sprite = scene.physics.add.sprite(x, y, "catStayDown", 0);
-    this.sprite.setScale(2);
+    // this.sprite.setScale(2);
 
     // Клавиши
     this.keys = scene.input!.keyboard!.addKeys("W,A,S,D") as typeof this.keys;
