@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { getVisualBottomY } from "../../utils/getVisualBottom";
 
 export class Hero {
   private scene: Phaser.Scene;
@@ -13,7 +14,8 @@ export class Hero {
     // Игрок
     this.sprite = scene.physics.add.sprite(x, y, "catStayDown", 0);
     // this.sprite.setScale(2);
-
+    this.sprite.setBodySize(this.sprite.width * 0.55, this.sprite.height * 0.4);
+    this.sprite.setOffset(this.sprite.width * 0.2, this.sprite.height * 0.5);
     // Клавиши
     this.keys = scene.input!.keyboard!.addKeys("W,A,S,D") as typeof this.keys;
 
@@ -94,7 +96,7 @@ export class Hero {
   }
 
   update() {
-    const speed = 100;
+    const speed = 500;
     const keys = this.keys;
     const player = this.sprite;
 
@@ -148,6 +150,8 @@ export class Hero {
       }
       // если state === "transition", ничего не делаем, ждём завершения
     }
+
+    this.sprite.setDepth(getVisualBottomY(this.sprite));
   }
 
   getSprite() {
