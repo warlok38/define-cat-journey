@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import PhaserRaycaster from "phaser-raycaster";
 import MainScene from "./scenes/MainScene";
 
 const config: Phaser.Types.Core.GameConfig = {
@@ -21,6 +22,15 @@ const config: Phaser.Types.Core.GameConfig = {
     // arcade: { debug: false },
   },
   scene: [MainScene],
+  plugins: {
+    scene: [
+      {
+        key: "PhaserRaycaster",
+        plugin: PhaserRaycaster,
+        mapping: "raycasterPlugin",
+      },
+    ],
+  },
 };
 
 export default config;

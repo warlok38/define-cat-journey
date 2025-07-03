@@ -7,6 +7,7 @@ export class Hero {
   private keys: Record<"W" | "A" | "S" | "D", Phaser.Input.Keyboard.Key>;
   private lastDirection: "up" | "down" | "left" | "right" = "down";
   private state: "idle" | "moving" | "transition" = "idle";
+  private shadow!: Phaser.GameObjects.Image;
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     this.scene = scene;
@@ -16,6 +17,11 @@ export class Hero {
     // this.sprite.setScale(2);
     this.sprite.setBodySize(this.sprite.width * 0.55, this.sprite.height * 0.4);
     this.sprite.setOffset(this.sprite.width * 0.2, this.sprite.height * 0.5);
+    //shadow
+    this.shadow = this.scene.add.image(x - 1, y + 1, "catShadowFront");
+    this.shadow.setAlpha(0.6);
+    this.shadow.setDepth(getVisualBottomY(this.sprite) - 1);
+    this.shadow.setPipeline("Light2D");
     // Клавиши
     this.keys = scene.input!.keyboard!.addKeys("W,A,S,D") as typeof this.keys;
 
@@ -96,7 +102,7 @@ export class Hero {
   }
 
   update() {
-    const speed = 500;
+    const speed = 300;
     const keys = this.keys;
     const player = this.sprite;
 
@@ -152,6 +158,20 @@ export class Hero {
     }
 
     this.sprite.setDepth(getVisualBottomY(this.sprite));
+
+    this.shadow.setDepth(this.sprite.depth - 1);
+
+    const isSide =
+      this.lastDirection === "left" || this.lastDirection === "right";
+    const targetTexture = isSide ? "catShadowSide" : "catShadowFront";
+
+    if (this.shadow.texture.key !== targetTexture) {
+      this.shadow.setTexture(targetTexture);
+    }
+
+    const px = this.sprite.x + (isSide ? 0 : -1);
+    const py = this.sprite.y + (isSide ? 6 : 2);
+    this.shadow.setPosition(px, py);
   }
 
   getSprite() {
