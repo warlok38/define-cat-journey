@@ -23,32 +23,6 @@ export class HouseDoor extends Phaser.GameObjects.GameObject {
     this.sprite.setDepth(getVisualBottomY(this.sprite) - 8);
 
     this.sprite.setData("ref", this);
-
-    this.createAnimations();
-  }
-
-  private createAnimations() {
-    const anims = this.scene.anims;
-
-    anims.create({
-      key: "door-open",
-      frames: this.scene.anims.generateFrameNumbers("door", {
-        start: 0,
-        end: 4,
-      }),
-      frameRate: 12,
-      repeat: 0,
-    });
-
-    anims.create({
-      key: "door-close",
-      frames: this.scene.anims.generateFrameNumbers("door", {
-        start: 4,
-        end: 8,
-      }),
-      frameRate: 12,
-      repeat: 0,
-    });
   }
 
   get open(): boolean {

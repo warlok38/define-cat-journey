@@ -1,6 +1,8 @@
 import Phaser from "phaser";
 import PhaserRaycaster from "phaser-raycaster";
 import MainScene from "./scenes/MainScene";
+import BasementScene from "./scenes/BasementScene";
+import PreloadScene from "./scenes/PreloadScene";
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -19,9 +21,9 @@ const config: Phaser.Types.Core.GameConfig = {
   },
   physics: {
     default: "arcade",
-    // arcade: { debug: false },
+    arcade: { debug: true },
   },
-  scene: [MainScene],
+  scene: [PreloadScene, MainScene, BasementScene],
   plugins: {
     scene: [
       {

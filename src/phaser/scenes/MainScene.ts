@@ -2,87 +2,25 @@ import Phaser from "phaser";
 import { Hero } from "../characters";
 import { setupCamera } from "../utils/camera";
 import { getVisualBottomY } from "../utils/getVisualBottom";
-import { HouseDoor, HouseWindow } from "../objects";
+import { HouseDoor, HouseWindow, SceneTransfer } from "../objects";
 import { GRID_SIZE } from "../../consts";
 import { createCollisionFromObject } from "../utils/createCollisionFromObject";
-
-const frameBounds = {
-  frameWidth: 32,
-  frameHeight: 32,
-};
+import type { SceneCreateDTO } from "../interfaces";
 
 export default class MainScene extends Phaser.Scene {
   private hero!: Hero;
   private houseWindows: HouseWindow[] = [];
-  private houseDoor!: HouseDoor;
+  houseDoor!: HouseDoor;
 
   constructor() {
     super("MainScene");
   }
 
-  preload() {
-    //tiles
-    this.load.image("houseInteriorTiles", "/assets/tiles/house-interior.png");
-    this.load.image("houseObjectsTiles", "/assets/tiles/house-objects.png");
-    this.load.tilemapTiledJSON("houseMap", "assets/tiles/house-interior.json");
+  create(data: SceneCreateDTO) {
+    const heroStartX = data.heroStartX ?? 1100;
+    const heroStartY = data.heroStartY ?? 200;
+    const heroStartDirection = data.heroStartDirection ?? "down";
 
-    //objects
-    this.load.image("chest", "/assets/objects/chest.png");
-    this.load.spritesheet("door", "/assets/objects/door.png", {
-      frameWidth: 48,
-      frameHeight: 112,
-    });
-    this.load.image("table", "/assets/objects/table.png");
-    this.load.image("window", "/assets/objects/window.png");
-    this.load.image(
-      "windowViewGarden",
-      "/assets/objects/window-view-garden.png"
-    );
-
-    //hero cat
-    this.load.spritesheet(
-      "catWalkDown",
-      "/assets/cat-walk-down.png",
-      frameBounds
-    );
-    this.load.spritesheet("catWalkUp", "/assets/cat-walk-up.png", frameBounds);
-    this.load.spritesheet(
-      "catWalkRight",
-      "/assets/cat-walk-right.png",
-      frameBounds
-    );
-    this.load.spritesheet(
-      "catWalkLeft",
-      "/assets/cat-walk-left.png",
-      frameBounds
-    );
-    this.load.spritesheet(
-      "catStayDown",
-      "/assets/cat-stay-down.png",
-      frameBounds
-    );
-    this.load.spritesheet("catStayUp", "/assets/cat-stay-up.png", frameBounds);
-    this.load.spritesheet(
-      "catStayRight",
-      "/assets/cat-stay-right.png",
-      frameBounds
-    );
-    this.load.spritesheet(
-      "catStayLeft",
-      "/assets/cat-stay-left.png",
-      frameBounds
-    );
-    this.load.spritesheet(
-      "catStayDownStartOnce",
-      "/assets/cat-stay-down-start-once.png",
-      frameBounds
-    );
-    //hero shadow
-    this.load.image("catShadowFront", "/assets/cat-shadow-front.png");
-    this.load.image("catShadowSide", "/assets/cat-shadow-side.png");
-  }
-
-  create() {
     const map = this.make.tilemap({ key: "houseMap" });
     const tileset = map.addTilesetImage("house-interior", "houseInteriorTiles");
     const tilesetObjects = map.addTilesetImage(
@@ -151,7 +89,7 @@ export default class MainScene extends Phaser.Scene {
     // houseDoor.open = true;
 
     //hero
-    this.hero = new Hero(this, 1100, 200);
+    this.hero = new Hero(this, heroStartX, heroStartY, heroStartDirection);
     //hero colliders
     collisionOtherLayer.objects.forEach((obj) => {
       if (
@@ -203,6 +141,15 @@ export default class MainScene extends Phaser.Scene {
       this
     );
 
+    //transfers
+    const transferZone = new SceneTransfer(this, 1200, 520, {
+      sceneKey: "BasementScene",
+      heroStartX: 650,
+      heroStartY: 120,
+    });
+    transferZone.setupCollision(this.hero.getSprite());
+
+    this.cameras.main.fadeIn(300, 0, 0, 0);
     setupCamera(this, this.hero.getSprite(), { width: 1280, height: 1920 });
 
     //debug
@@ -219,7 +166,7 @@ export default class MainScene extends Phaser.Scene {
   update() {
     this.hero.update();
     this.houseWindows.forEach((houseWindow) => houseWindow.update());
-    // Сброс цели, если герой больше не пересекается с объектом
+
     if (
       this.hero.getCurrentTarget() &&
       !Phaser.Geom.Intersects.RectangleToRectangle(

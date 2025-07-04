@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { getVisualBottomY } from "../../utils/getVisualBottom";
-import type { Interactable } from "../../interfaces";
+import type { Direction, Interactable } from "../../interfaces";
 
 export class Hero {
   private scene: Phaser.Scene;
@@ -14,8 +14,14 @@ export class Hero {
   private currentTarget: Phaser.GameObjects.GameObject | null = null;
   private eKeyWasDown: boolean = false;
 
-  constructor(scene: Phaser.Scene, x: number, y: number) {
+  constructor(
+    scene: Phaser.Scene,
+    x: number,
+    y: number,
+    direction: Direction = "down"
+  ) {
     this.scene = scene;
+    this.lastDirection = direction;
 
     // Игрок
     this.sprite = scene.physics.add.sprite(x, y, "catStayDown", 0);
@@ -39,79 +45,11 @@ export class Hero {
     body.setAllowGravity(false);
     body.setImmovable(true);
 
-    this.createAnimations();
-
     this.sprite.on("animationcomplete", (anim: Phaser.Animations.Animation) => {
       if (anim.key === "stay-down-start-once") {
         this.state = "idle";
         this.sprite.anims.play("stay-down", true);
       }
-    });
-  }
-
-  private createAnimations() {
-    const anims = this.scene.anims;
-
-    anims.create({
-      key: "walk-down",
-      frames: anims.generateFrameNumbers("catWalkDown"),
-      frameRate: 8,
-      repeat: -1,
-    });
-
-    anims.create({
-      key: "walk-up",
-      frames: anims.generateFrameNumbers("catWalkUp"),
-      frameRate: 8,
-      repeat: -1,
-    });
-
-    anims.create({
-      key: "walk-right",
-      frames: anims.generateFrameNumbers("catWalkRight"),
-      frameRate: 8,
-      repeat: -1,
-    });
-
-    anims.create({
-      key: "walk-left",
-      frames: anims.generateFrameNumbers("catWalkLeft"),
-      frameRate: 8,
-      repeat: -1,
-    });
-
-    anims.create({
-      key: "stay-down",
-      frames: anims.generateFrameNumbers("catStayDown"),
-      frameRate: 8,
-      repeat: -1,
-    });
-
-    anims.create({
-      key: "stay-up",
-      frames: anims.generateFrameNumbers("catStayUp"),
-      frameRate: 8,
-      repeat: -1,
-    });
-
-    anims.create({
-      key: "stay-right",
-      frames: anims.generateFrameNumbers("catStayRight"),
-      frameRate: 8,
-      repeat: -1,
-    });
-
-    anims.create({
-      key: "stay-left",
-      frames: anims.generateFrameNumbers("catStayLeft"),
-      frameRate: 8,
-      repeat: -1,
-    });
-
-    anims.create({
-      key: "stay-down-start-once",
-      frames: anims.generateFrameNumbers("catStayDownStartOnce"),
-      frameRate: 8,
     });
   }
 
