@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import { Hero } from "../characters";
 import { setupCamera } from "../utils/camera";
 import { getVisualBottomY } from "../utils/getVisualBottom";
-import { HouseWindow } from "../objects";
+import { HouseDoor, HouseWindow } from "../objects";
 import { GRID_SIZE } from "../../consts";
 import { createCollisionFromObject } from "../utils/createCollisionFromObject";
 
@@ -14,6 +14,7 @@ const frameBounds = {
 export default class MainScene extends Phaser.Scene {
   private hero!: Hero;
   private houseWindows: HouseWindow[] = [];
+  private houseDoor!: HouseDoor;
 
   constructor() {
     super("MainScene");
@@ -27,7 +28,10 @@ export default class MainScene extends Phaser.Scene {
 
     //objects
     this.load.image("chest", "/assets/objects/chest.png");
-    this.load.image("door", "/assets/objects/door.png");
+    this.load.spritesheet("door", "/assets/objects/door.png", {
+      frameWidth: 48,
+      frameHeight: 112,
+    });
     this.load.image("table", "/assets/objects/table.png");
     this.load.image("window", "/assets/objects/window.png");
     this.load.image(
@@ -128,6 +132,9 @@ export default class MainScene extends Phaser.Scene {
     floorsLayer.setPipeline("Light2D");
     wallsLayer.setPipeline("Light2D");
 
+    //interactive objects group
+    const interactables = this.add.group();
+
     //objects
     const chest = this.physics.add.sprite(920, 450, "chest");
     chest.setImmovable(true);
@@ -135,6 +142,13 @@ export default class MainScene extends Phaser.Scene {
     chest.setOffset(1, 6);
     chest.setPipeline("Light2D");
     chest.setDepth(getVisualBottomY(chest));
+    chest.setData("ref", chest);
+    interactables.add(chest);
+
+    const houseDoor = (this.houseDoor = new HouseDoor(this, 1192, 360)); // координаты X, Y по центру двери
+    interactables.add(houseDoor.getSprite());
+
+    // houseDoor.open = true;
 
     //hero
     this.hero = new Hero(this, 1100, 200);
@@ -153,9 +167,17 @@ export default class MainScene extends Phaser.Scene {
 
     this.physics.add.collider(this.hero.getSprite(), collisionsLayer);
     this.physics.add.collider(this.hero.getSprite(), chest);
+    const doorCollider = this.physics.add.collider(
+      this.hero.getSprite(),
+      houseDoor.getSprite()
+    );
+    houseDoor.setCollider(doorCollider);
+
     //hero light
     this.hero.getSprite().setPipeline("Light2D");
 
+    //hero interactions
+    //windows
     this.houseWindows.push(
       new HouseWindow(
         this,
@@ -170,12 +192,22 @@ export default class MainScene extends Phaser.Scene {
         GRID_SIZE * 12
       )
     );
+    //interaction zone
+    this.physics.add.overlap(
+      this.hero.getInteractionZone(),
+      interactables,
+      (_, target) => {
+        this.hero.setCurrentTarget(target as Phaser.GameObjects.GameObject);
+      },
+      undefined,
+      this
+    );
 
     setupCamera(this, this.hero.getSprite(), { width: 1280, height: 1920 });
 
     //debug
     //hitboxes
-    this.physics.world.createDebugGraphic();
+    // this.physics.world.createDebugGraphic();
 
     //map grid cells
     // this.add
@@ -187,5 +219,15 @@ export default class MainScene extends Phaser.Scene {
   update() {
     this.hero.update();
     this.houseWindows.forEach((houseWindow) => houseWindow.update());
+    // Сброс цели, если герой больше не пересекается с объектом
+    if (
+      this.hero.getCurrentTarget() &&
+      !Phaser.Geom.Intersects.RectangleToRectangle(
+        this.hero.getInteractionZone().getBounds(),
+        (this.hero.getCurrentTarget() as Phaser.GameObjects.Sprite).getBounds()
+      )
+    ) {
+      this.hero.setCurrentTarget(null);
+    }
   }
 }
