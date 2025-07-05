@@ -43,6 +43,7 @@ export default class MainScene extends Phaser.Scene {
       0,
       0
     );
+    const objectsLayer = map.createLayer("objects", [tilesetObjects], 0, 0);
     const boundsLayer = map.createLayer("bounds", tileset, 0, 0);
     const collisionsLayer = map.createLayer("collisions", tileset, 0, -12);
     const collisionOtherLayer = map.getObjectLayer("collisions-other");
@@ -55,6 +56,9 @@ export default class MainScene extends Phaser.Scene {
     }
     if (!wallsLayer) {
       throw new Error("wallsLayer not found!");
+    }
+    if (!objectsLayer) {
+      throw new Error("objectsLayer not found!");
     }
     if (!collisionsLayer) {
       throw new Error("collisionsLayer not found!");
@@ -69,6 +73,7 @@ export default class MainScene extends Phaser.Scene {
     this.lights.enable().setAmbientColor(0xffffff);
     floorsLayer.setPipeline("Light2D");
     wallsLayer.setPipeline("Light2D");
+    objectsLayer.setPipeline("Light2D");
 
     //interactive objects group
     const interactables = this.add.group();
