@@ -5,7 +5,10 @@ import type { Direction, Interactable } from "../../interfaces";
 export class Hero {
   private scene: Phaser.Scene;
   private sprite: Phaser.Physics.Arcade.Sprite;
-  private keys: Record<"W" | "A" | "S" | "D" | "E", Phaser.Input.Keyboard.Key>;
+  private keys: Record<
+    "W" | "A" | "S" | "D" | "E" | "SHIFT" | "SPACE",
+    Phaser.Input.Keyboard.Key
+  >;
   private lastDirection: "up" | "down" | "left" | "right" = "down";
   private state: "idle" | "moving" | "transition" = "idle";
   private shadow!: Phaser.GameObjects.Image;
@@ -13,6 +16,7 @@ export class Hero {
   private interactionZone!: Phaser.GameObjects.Zone;
   private currentTarget: Phaser.GameObjects.GameObject | null = null;
   private eKeyWasDown: boolean = false;
+  private isJumping = false;
 
   constructor(
     scene: Phaser.Scene,
@@ -36,7 +40,15 @@ export class Hero {
     this.shadow.setDepth(getVisualBottomY(this.sprite) - 1);
     this.shadow.setPipeline("Light2D");
     // Клавиши
-    this.keys = scene.input!.keyboard!.addKeys("W,A,S,D,E") as typeof this.keys;
+    this.keys = {
+      W: scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+      A: scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+      S: scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+      D: scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+      E: scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.E),
+      SHIFT: scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT),
+      SPACE: scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
+    };
 
     // Interaction zone
     this.interactionZone = scene.add.zone(x, y, 10, 8);
@@ -54,7 +66,9 @@ export class Hero {
   }
 
   update() {
-    const speed = 100;
+    const baseSpeed = 100;
+    const boost = this.keys.SHIFT.isDown ? 200 : 0;
+    const speed = baseSpeed + boost;
     const keys = this.keys;
     const player = this.sprite;
 
@@ -80,6 +94,11 @@ export class Hero {
       vx = speed;
       animKey = "walk-right";
       this.lastDirection = "right";
+    }
+
+    if (this.keys.SPACE.isDown && !this.isJumping) {
+      //TODO разобраться с коллизиями при прыжке
+      // this.jump();
     }
 
     player.setVelocity(vx, vy);
@@ -177,5 +196,40 @@ export class Hero {
 
   getSprite() {
     return this.sprite;
+  }
+
+  jump() {
+    if (this.isJumping) return;
+
+    this.isJumping = true;
+
+    const jumpHeight = 50;
+    const duration = 300;
+
+    // Подпрыгиваем вверх
+    this.scene.tweens.add({
+      targets: this.sprite,
+      y: this.sprite.y - jumpHeight,
+      scaleY: 0.9,
+      duration,
+      ease: "Sine.easeOut",
+      yoyo: true,
+    });
+
+    // Тень уменьшается
+    this.scene.tweens.add({
+      targets: this.shadow,
+      scaleX: 0.7,
+      scaleY: 0.7,
+      alpha: 0.4,
+      duration,
+      ease: "Sine.easeOut",
+      yoyo: true,
+    });
+
+    // Через время сбросим флаг
+    this.scene.time.delayedCall(duration * 2, () => {
+      this.isJumping = false;
+    });
   }
 }
