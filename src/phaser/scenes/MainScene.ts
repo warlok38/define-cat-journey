@@ -1,24 +1,25 @@
 import Phaser from "phaser";
 import { Hero } from "../characters";
 import { setupCamera } from "../utils/camera";
-import { getVisualBottomY } from "../utils/getVisualBottom";
-import { HouseDoor, HouseWindow, SceneTransfer } from "../objects";
-import { GRID_SIZE } from "../../consts";
+import { BaseObject, HouseDoor, HouseWindow, SceneTransfer } from "../objects";
+import { GRID_SIZE, HERO_START_POSITIONS_MAP } from "../../consts";
 import { createCollisionFromObject } from "../utils/createCollisionFromObject";
 import type { SceneCreateDTO } from "../interfaces";
+import { getVisualBottomY } from "../utils/getVisualBottom";
 
 export default class MainScene extends Phaser.Scene {
   private hero!: Hero;
   private houseWindows: HouseWindow[] = [];
-  houseDoor!: HouseDoor;
 
   constructor() {
     super("MainScene");
   }
 
   create(data: SceneCreateDTO) {
-    const heroStartX = data.heroStartX ?? 1100;
-    const heroStartY = data.heroStartY ?? 200;
+    const heroStartX =
+      data.heroStartX ?? HERO_START_POSITIONS_MAP.mainScene.temp.x;
+    const heroStartY =
+      data.heroStartY ?? HERO_START_POSITIONS_MAP.mainScene.temp.y;
     const heroStartDirection = data.heroStartDirection ?? "down";
 
     const map = this.make.tilemap({ key: "houseMap" });
@@ -79,19 +80,39 @@ export default class MainScene extends Phaser.Scene {
     const interactables = this.add.group();
 
     //objects
-    const chest = this.physics.add.sprite(920, 450, "chest");
-    chest.setImmovable(true);
-    chest.setSize(chest.width * 0.9, chest.height * 0.55);
-    chest.setOffset(1, 6);
-    chest.setPipeline("Light2D");
-    chest.setDepth(getVisualBottomY(chest));
-    chest.setData("ref", chest);
-    interactables.add(chest);
+    const woodChair = new BaseObject(this, 1056, 200, "chairs", {
+      sizeOffset: { width: -8, height: -36 },
+      offset: { x: 0, y: 10 },
+      depthOffset: -4,
+      frame: 1,
+    });
 
-    const houseDoor = (this.houseDoor = new HouseDoor(this, 1192, 360)); // координаты X, Y по центру двери
+    const tableFigure = new BaseObject(this, 784, 430, "furniture", {
+      frame: 1,
+      customHitboxes: [
+        {
+          x: 32,
+          y: 26,
+          width: 10,
+          height: 16,
+        },
+        {
+          x: -32,
+          y: 26,
+          width: 10,
+          height: 16,
+        },
+      ],
+    });
+    interactables.add(tableFigure.getSprite());
+
+    const chest = new BaseObject(this, 784, 412, "chest", {
+      depthOffset: getVisualBottomY(tableFigure.getSprite()) + 1,
+    });
+    interactables.add(chest.getSprite());
+
+    const houseDoor = new HouseDoor(this, 1192, 360); // координаты X, Y по центру двери
     interactables.add(houseDoor.getSprite());
-
-    // houseDoor.open = true;
 
     //hero
     this.hero = new Hero(this, heroStartX, heroStartY, heroStartDirection);
@@ -109,7 +130,10 @@ export default class MainScene extends Phaser.Scene {
     });
 
     this.physics.add.collider(this.hero.getSprite(), collisionsLayer);
-    this.physics.add.collider(this.hero.getSprite(), chest);
+    woodChair.setCollisionWith(this.hero.getSprite());
+    tableFigure.setCollisionWith(this.hero.getSprite());
+    chest.setCollisionWith(this.hero.getSprite());
+
     const doorCollider = this.physics.add.collider(
       this.hero.getSprite(),
       houseDoor.getSprite()
@@ -149,8 +173,8 @@ export default class MainScene extends Phaser.Scene {
     //transfers
     const transferZone = new SceneTransfer(this, 1200, 520, {
       sceneKey: "BasementScene",
-      heroStartX: 650,
-      heroStartY: 120,
+      heroStartX: HERO_START_POSITIONS_MAP.basementScene.basementStairs.x,
+      heroStartY: HERO_START_POSITIONS_MAP.basementScene.basementStairs.y,
     });
     transferZone.setupCollision(this.hero.getSprite());
 

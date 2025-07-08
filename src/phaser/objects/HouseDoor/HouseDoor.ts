@@ -1,10 +1,8 @@
 import Phaser from "phaser";
-import { getVisualBottomY } from "../../utils/getVisualBottom";
+import { BaseObject } from "../BaseObject/BaseObject";
 
-export class HouseDoor extends Phaser.GameObjects.GameObject {
-  private sprite: Phaser.Physics.Arcade.Sprite;
+export class HouseDoor extends BaseObject {
   private _open: boolean = false;
-  scene: Phaser.Scene;
   private colliderWithHero?: Phaser.Physics.Arcade.Collider;
 
   constructor(
@@ -13,16 +11,7 @@ export class HouseDoor extends Phaser.GameObjects.GameObject {
     y: number,
     texture: string = "door"
   ) {
-    super(scene, "HouseDoor");
-    this.scene = scene;
-
-    this.sprite = this.scene.physics.add.sprite(x, y, texture, 0);
-    this.sprite.setOffset(0, this.sprite.height * -0.05);
-
-    this.sprite.setImmovable(true);
-    this.sprite.setDepth(getVisualBottomY(this.sprite) - 8);
-
-    this.sprite.setData("ref", this);
+    super(scene, x, y, texture, { offset: { x: 0, y: -8 }, depthOffset: -8 });
   }
 
   get open(): boolean {

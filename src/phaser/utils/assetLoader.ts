@@ -26,6 +26,14 @@ export function loadAssets(scene: Phaser.Scene) {
     "windowViewGarden",
     "/assets/objects/window-view-garden.png"
   );
+  scene.load.spritesheet("chairs", "/assets/objects/chairs.png", {
+    frameWidth: 32,
+    frameHeight: 48,
+  });
+  scene.load.spritesheet("furniture", "/assets/objects/furniture.png", {
+    frameWidth: 80,
+    frameHeight: 80,
+  });
 
   // Hero: animations
   scene.load.spritesheet(
