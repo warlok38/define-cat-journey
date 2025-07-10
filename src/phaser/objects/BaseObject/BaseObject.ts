@@ -1,14 +1,7 @@
 // src/objects/SceneObject.ts
 import Phaser from "phaser";
 import { getVisualBottomY } from "../../utils/getVisualBottom";
-import type { Interactable } from "../../interfaces";
-
-interface CustomHitbox {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
+import type { BaseObjectOptions, Interactable } from "../../interfaces";
 
 export class BaseObject
   extends Phaser.GameObjects.GameObject
@@ -24,15 +17,7 @@ export class BaseObject
     x: number,
     y: number,
     texture: string,
-    options?: {
-      sizeOffset?: { width: number; height: number };
-      offset?: { x: number; y: number };
-      frame?: string | number;
-      depthOffset?: number;
-      ref?: Interactable;
-      noLight?: boolean;
-      customHitboxes?: CustomHitbox[];
-    }
+    options?: BaseObjectOptions
   ) {
     super(scene, "BaseObject");
     this.scene = scene;

@@ -1,15 +1,17 @@
 import Phaser from "phaser";
 import { Hero } from "../characters";
 import { setupCamera } from "../utils/camera";
-import { BaseObject, HouseDoor, HouseWindow, SceneTransfer } from "../objects";
+import { HouseWindow, SceneTransfer } from "../objects";
 import { GRID_SIZE, HERO_START_POSITIONS_MAP } from "../../consts";
 import { createCollisionFromObject } from "../utils/createCollisionFromObject";
 import type { SceneCreateDTO } from "../interfaces";
+import { LayerFactory, ObjectFactory } from "../managers";
 import { getVisualBottomY } from "../utils/getVisualBottom";
 
 export default class MainScene extends Phaser.Scene {
   private hero!: Hero;
   private houseWindows: HouseWindow[] = [];
+  private objectFactory!: ObjectFactory;
 
   constructor() {
     super("MainScene");
@@ -22,51 +24,16 @@ export default class MainScene extends Phaser.Scene {
       data.heroStartY ?? HERO_START_POSITIONS_MAP.mainScene.temp.y;
     const heroStartDirection = data.heroStartDirection ?? "down";
 
-    const map = this.make.tilemap({ key: "houseMap" });
-    const tileset = map.addTilesetImage("house-interior", "houseInteriorTiles");
-    const tilesetObjects = map.addTilesetImage(
-      "house-objects",
-      "houseObjectsTiles"
-    );
+    //layers factory
+    const layerFactory = new LayerFactory(this, "houseMap");
 
-    if (!tileset) {
-      throw new Error("Tileset not found!");
-    }
+    const floorsLayer = layerFactory.getLayer("floors");
+    const wallsLayer = layerFactory.getLayer("walls");
+    const objectsLayer = layerFactory.getLayer("objects");
+    const boundsLayer = layerFactory.getLayer("bounds");
+    const collisionsLayer = layerFactory.getLayer("collisions");
+    const collisionOtherLayer = layerFactory.getObjectLayer("collisions-other");
 
-    if (!tilesetObjects) {
-      throw new Error("tilesetObjects not found!");
-    }
-
-    const floorsLayer = map.createLayer("floors", tileset, 0, 0);
-    const wallsLayer = map.createLayer(
-      "walls",
-      [tileset, tilesetObjects],
-      0,
-      0
-    );
-    const objectsLayer = map.createLayer("objects", [tilesetObjects], 0, 0);
-    const boundsLayer = map.createLayer("bounds", tileset, 0, 0);
-    const collisionsLayer = map.createLayer("collisions", tileset, 0, -12);
-    const collisionOtherLayer = map.getObjectLayer("collisions-other");
-
-    if (!boundsLayer) {
-      throw new Error("boundsLayer not found!");
-    }
-    if (!floorsLayer) {
-      throw new Error("floorsLayer not found!");
-    }
-    if (!wallsLayer) {
-      throw new Error("wallsLayer not found!");
-    }
-    if (!objectsLayer) {
-      throw new Error("objectsLayer not found!");
-    }
-    if (!collisionsLayer) {
-      throw new Error("collisionsLayer not found!");
-    }
-    if (!collisionOtherLayer) {
-      throw new Error("collisionOtherLayer not found!");
-    }
     collisionsLayer.setCollisionByProperty({ isCollide: true });
     boundsLayer.setDepth(9999);
 
@@ -75,44 +42,6 @@ export default class MainScene extends Phaser.Scene {
     floorsLayer.setPipeline("Light2D");
     wallsLayer.setPipeline("Light2D");
     objectsLayer.setPipeline("Light2D");
-
-    //interactive objects group
-    const interactables = this.add.group();
-
-    //objects
-    const woodChair = new BaseObject(this, 1056, 200, "chairs", {
-      sizeOffset: { width: -8, height: -36 },
-      offset: { x: 0, y: 10 },
-      depthOffset: -4,
-      frame: 1,
-    });
-
-    const tableFigure = new BaseObject(this, 784, 430, "furniture", {
-      frame: 1,
-      customHitboxes: [
-        {
-          x: 32,
-          y: 26,
-          width: 10,
-          height: 16,
-        },
-        {
-          x: -32,
-          y: 26,
-          width: 10,
-          height: 16,
-        },
-      ],
-    });
-    interactables.add(tableFigure.getSprite());
-
-    const chest = new BaseObject(this, 784, 412, "chest", {
-      depthOffset: getVisualBottomY(tableFigure.getSprite()) + 1,
-    });
-    interactables.add(chest.getSprite());
-
-    const houseDoor = new HouseDoor(this, 1192, 360); // координаты X, Y по центру двери
-    interactables.add(houseDoor.getSprite());
 
     //hero
     this.hero = new Hero(this, heroStartX, heroStartY, heroStartDirection);
@@ -130,15 +59,44 @@ export default class MainScene extends Phaser.Scene {
     });
 
     this.physics.add.collider(this.hero.getSprite(), collisionsLayer);
-    woodChair.setCollisionWith(this.hero.getSprite());
-    tableFigure.setCollisionWith(this.hero.getSprite());
-    chest.setCollisionWith(this.hero.getSprite());
 
-    const doorCollider = this.physics.add.collider(
-      this.hero.getSprite(),
-      houseDoor.getSprite()
-    );
-    houseDoor.setCollider(doorCollider);
+    //objects factory
+    this.objectFactory = new ObjectFactory(this, this.hero);
+    this.objectFactory.create({
+      type: "chair",
+      x: 1056,
+      y: 200,
+      options: {
+        frame: 1,
+      },
+    });
+
+    const tableFigure = this.objectFactory.create({
+      type: "table",
+      x: 784,
+      y: 430,
+      options: {
+        customHitboxes: [
+          { x: 32, y: 26, width: 10, height: 16 },
+          { x: -32, y: 26, width: 10, height: 16 },
+        ],
+      },
+    });
+
+    this.objectFactory.create({
+      type: "chest",
+      x: 784,
+      y: 412,
+      options: {
+        depthOffset: getVisualBottomY(tableFigure?.getSprite()) + 1,
+      },
+    });
+
+    this.objectFactory.create({
+      type: "door",
+      x: 1192,
+      y: 360,
+    });
 
     //hero light
     this.hero.getSprite().setPipeline("Light2D");
@@ -162,7 +120,7 @@ export default class MainScene extends Phaser.Scene {
     //interaction zone
     this.physics.add.overlap(
       this.hero.getInteractionZone(),
-      interactables,
+      this.objectFactory.getInteractables(),
       (_, target) => {
         this.hero.setCurrentTarget(target as Phaser.GameObjects.GameObject);
       },
