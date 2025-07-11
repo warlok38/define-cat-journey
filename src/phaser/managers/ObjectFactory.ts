@@ -1,14 +1,7 @@
 import Phaser from "phaser";
-import { BaseObject, HouseDoor } from "../objects";
+import { BaseObject, Fridge, HouseDoor, TVObject } from "../objects";
 import type { Hero } from "../characters";
-import type { BaseObjectOptions } from "../interfaces";
-
-interface ObjectDefinition {
-  type: string;
-  x: number;
-  y: number;
-  options?: BaseObjectOptions;
-}
+import type { ObjectFactoryCreateProps } from "../interfaces";
 
 export class ObjectFactory {
   private scene: Phaser.Scene;
@@ -25,16 +18,66 @@ export class ObjectFactory {
     return this.interactables;
   }
 
-  create(objectDef: ObjectDefinition) {
-    const { type, x, y, options = {} } = objectDef;
+  create(props: ObjectFactoryCreateProps) {
+    const { type, x, y, options = {} } = props;
 
     switch (type) {
+      case "fridge": {
+        const fridge = new Fridge(this.scene, x, y, {
+          ...options,
+        });
+        fridge.setCollisionWith(this.hero.getSprite());
+        this.interactables.add(fridge.getSprite());
+        return fridge;
+      }
+
+      case "TV": {
+        const TV = new TVObject(this.scene, x, y, {
+          ...options,
+        });
+        TV.setCollisionWith(this.hero.getSprite());
+        this.interactables.add(TV.getSprite());
+        return TV;
+      }
+
       case "chest": {
         const chest = new BaseObject(this.scene, x, y, "chest", {
           ...options,
         });
         chest.setCollisionWith(this.hero.getSprite());
         this.interactables.add(chest.getSprite());
+        return chest;
+      }
+
+      case "boxFloorSmall": {
+        const chest = new BaseObject(this.scene, x, y, "boxFloorSmall", {
+          ...options,
+        });
+        chest.setCollisionWith(this.hero.getSprite());
+        return chest;
+      }
+
+      case "boxFloorWide": {
+        const chest = new BaseObject(this.scene, x, y, "boxFloorWide", {
+          ...options,
+        });
+        chest.setCollisionWith(this.hero.getSprite());
+        return chest;
+      }
+
+      case "boxUpSmall": {
+        const chest = new BaseObject(this.scene, x, y, "boxUpSmall", {
+          ...options,
+        });
+        chest.setCollisionWith(this.hero.getSprite());
+        return chest;
+      }
+
+      case "boxUpWide": {
+        const chest = new BaseObject(this.scene, x, y, "boxUpWide", {
+          ...options,
+        });
+        chest.setCollisionWith(this.hero.getSprite());
         return chest;
       }
 

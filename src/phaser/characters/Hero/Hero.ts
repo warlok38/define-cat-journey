@@ -1,14 +1,12 @@
 import Phaser from "phaser";
 import { getVisualBottomY } from "../../utils/getVisualBottom";
 import type { Direction, Interactable } from "../../interfaces";
+import type { ControlsPlugin } from "../../plugins";
 
 export class Hero {
   private scene: Phaser.Scene;
   private sprite: Phaser.Physics.Arcade.Sprite;
-  private keys: Record<
-    "W" | "A" | "S" | "D" | "E" | "SHIFT" | "SPACE",
-    Phaser.Input.Keyboard.Key
-  >;
+  private keys!: ReturnType<ControlsPlugin["getKeys"]>;
   private lastDirection: "up" | "down" | "left" | "right" = "down";
   private state: "idle" | "moving" | "transition" = "idle";
   private shadow!: Phaser.GameObjects.Image;
@@ -40,15 +38,7 @@ export class Hero {
     this.shadow.setDepth(getVisualBottomY(this.sprite) - 1);
     this.shadow.setPipeline("Light2D");
     // Клавиши
-    this.keys = {
-      W: scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.W),
-      A: scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.A),
-      S: scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.S),
-      D: scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.D),
-      E: scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.E),
-      SHIFT: scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT),
-      SPACE: scene.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE),
-    };
+    this.keys = scene.controls.getKeys();
 
     // Interaction zone
     this.interactionZone = scene.add.zone(x, y, 10, 8);

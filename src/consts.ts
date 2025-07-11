@@ -5,6 +5,7 @@ export const HERO_START_POSITIONS_MAP = {
   mainScene: {
     //delete. this temp for debug
     temp: {
+      // x: 200,
       x: 800,
       y: 500,
     },
@@ -24,3 +25,7 @@ export const HERO_START_POSITIONS_MAP = {
     },
   },
 };
+
+//plugins
+export const CONTROLS_PLUGIN_NAME = "ControlsPlugin";
+export const DEBUG_PLUGIN_NAME = "DebugPlugin";

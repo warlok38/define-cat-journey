@@ -14,5 +14,6 @@ export interface BaseObjectOptions {
   depthOffset?: number;
   ref?: Interactable;
   noLight?: boolean;
+  keepOriginHitbox?: boolean;
   customHitboxes?: CustomHitbox[];
 }

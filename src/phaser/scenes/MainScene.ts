@@ -98,6 +98,23 @@ export default class MainScene extends Phaser.Scene {
       y: 360,
     });
 
+    this.objectFactory.create({
+      type: "TV",
+      x: 724,
+      y: 480,
+    });
+
+    this.objectFactory.create({
+      type: "fridge",
+      x: 924,
+      y: 480,
+    });
+    this.objectFactory.create({
+      type: "boxFloorSmall",
+      x: 224,
+      y: 440,
+    });
+
     //hero light
     this.hero.getSprite().setPipeline("Light2D");
 

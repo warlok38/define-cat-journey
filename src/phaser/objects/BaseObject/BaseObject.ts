@@ -10,6 +10,8 @@ export class BaseObject
   private collider?: Phaser.Physics.Arcade.Collider;
   private customZones: Phaser.GameObjects.Zone[] = [];
   private hitbox?: Phaser.GameObjects.Zone;
+  private keepOriginHitbox?: boolean;
+  private target?: Phaser.GameObjects.GameObject;
   protected sprite: Phaser.Physics.Arcade.Sprite;
 
   constructor(
@@ -21,6 +23,7 @@ export class BaseObject
   ) {
     super(scene, "BaseObject");
     this.scene = scene;
+    this.keepOriginHitbox = options?.keepOriginHitbox;
 
     this.sprite = scene.physics.add.sprite(x, y, texture, options?.frame);
     this.sprite.setImmovable(true);
@@ -52,7 +55,9 @@ export class BaseObject
 
     //custom hiboxes
     if (options?.customHitboxes?.length) {
-      (this.sprite.body as Phaser.Physics.Arcade.Body).setEnable(false);
+      if (!options.keepOriginHitbox) {
+        (this.sprite.body as Phaser.Physics.Arcade.Body).setEnable(false);
+      }
 
       for (const shape of options.customHitboxes) {
         const zone = scene.add.zone(
@@ -72,11 +77,19 @@ export class BaseObject
   }
 
   setCollisionWith(target: Phaser.GameObjects.GameObject) {
-    if (this.customZones.length > 0) {
-      for (const zone of this.customZones) {
-        this.scene.physics.add.collider(target, zone);
-      }
-    } else {
+    this.target = target;
+
+    this.collider?.destroy();
+    this.collider = undefined;
+
+    for (const zone of this.customZones) {
+      this.scene.physics.add.collider(target, zone);
+    }
+
+    const shouldAddSpriteCollider =
+      this.customZones.length === 0 || this.keepOriginHitbox;
+
+    if (shouldAddSpriteCollider) {
       this.collider = this.scene.physics.add.collider(target, this.sprite);
     }
   }
@@ -99,5 +112,35 @@ export class BaseObject
       this.collider.destroy();
     }
     this.hitbox?.destroy();
+  }
+
+  addCustomZone(shape: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  }) {
+    const zone = this.scene.add.zone(
+      this.sprite.x + shape.x,
+      this.sprite.y + shape.y,
+      shape.width,
+      shape.height
+    );
+    this.scene.physics.add.existing(zone, true);
+    zone.setData("ref", this);
+    this.customZones.push(zone);
+  }
+
+  clearCustomZones() {
+    for (const zone of this.customZones) {
+      zone.destroy();
+    }
+    this.customZones = [];
+  }
+
+  reapplyCollision() {
+    if (this.target) {
+      this.setCollisionWith(this.target);
+    }
   }
 }

@@ -16,16 +16,17 @@ export function loadAssets(scene: Phaser.Scene) {
 
   // Objects
   scene.load.image("chest", "/assets/objects/chest.png");
-  scene.load.spritesheet("door", "/assets/objects/door.png", {
-    frameWidth: 48,
-    frameHeight: 112,
-  });
+
   scene.load.image("table", "/assets/objects/table.png");
   scene.load.image("window", "/assets/objects/window.png");
   scene.load.image(
     "windowViewGarden",
     "/assets/objects/window-view-garden.png"
   );
+  scene.load.spritesheet("door", "/assets/objects/door.png", {
+    frameWidth: 48,
+    frameHeight: 112,
+  });
   scene.load.spritesheet("chairs", "/assets/objects/chairs.png", {
     frameWidth: 32,
     frameHeight: 48,
@@ -33,6 +34,38 @@ export function loadAssets(scene: Phaser.Scene) {
   scene.load.spritesheet("furniture", "/assets/objects/furniture.png", {
     frameWidth: 80,
     frameHeight: 80,
+  });
+  scene.load.spritesheet("TV", "/assets/objects/TV.png", {
+    frameWidth: 64,
+    frameHeight: 80,
+  });
+  scene.load.spritesheet("fridge", "/assets/objects/fridge.png", {
+    frameWidth: 48,
+    frameHeight: 116,
+  });
+  scene.load.spritesheet(
+    "boxFloorSmall",
+    "/assets/objects/boxes-floors-small.png",
+    {
+      frameWidth: 32,
+      frameHeight: 63,
+    }
+  );
+  scene.load.spritesheet(
+    "boxFloorWide",
+    "/assets/objects/boxes-floors-wide.png",
+    {
+      frameWidth: 64,
+      frameHeight: 63,
+    }
+  );
+  scene.load.spritesheet("boxUpSmall", "/assets/objects/boxes-ups-small.png", {
+    frameWidth: 32,
+    frameHeight: 47,
+  });
+  scene.load.spritesheet("boxUpWide", "/assets/objects/boxes-ups-wide.png", {
+    frameWidth: 64,
+    frameHeight: 47,
   });
 
   // Hero: animations

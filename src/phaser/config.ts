@@ -3,6 +3,8 @@ import PhaserRaycaster from "phaser-raycaster";
 import MainScene from "./scenes/MainScene";
 import BasementScene from "./scenes/BasementScene";
 import PreloadScene from "./scenes/PreloadScene";
+import { ControlsPlugin, DebugPlugin } from "./plugins";
+import { CONTROLS_PLUGIN_NAME, DEBUG_PLUGIN_NAME } from "../consts";
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -21,7 +23,7 @@ const config: Phaser.Types.Core.GameConfig = {
   },
   physics: {
     default: "arcade",
-    arcade: { debug: true },
+    arcade: { debug: false },
   },
   scene: [PreloadScene, MainScene, BasementScene],
   plugins: {
@@ -30,6 +32,16 @@ const config: Phaser.Types.Core.GameConfig = {
         key: "PhaserRaycaster",
         plugin: PhaserRaycaster,
         mapping: "raycasterPlugin",
+      },
+      {
+        key: CONTROLS_PLUGIN_NAME,
+        plugin: ControlsPlugin,
+        mapping: "controls",
+      },
+      {
+        key: DEBUG_PLUGIN_NAME,
+        plugin: DebugPlugin,
+        mapping: "debug",
       },
     ],
   },

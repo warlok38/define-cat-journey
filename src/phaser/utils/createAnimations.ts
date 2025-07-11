@@ -76,4 +76,24 @@ export function createAnimations(anims: Phaser.Animations.AnimationManager) {
     frameRate: 12,
     repeat: 0,
   });
+
+  // --- TV Animation ---
+  maybeCreate("tv-on", {
+    frames: anims.generateFrameNumbers("TV", { start: 1, end: 10 }),
+    frameRate: 8,
+    repeat: -1,
+  });
+
+  // --- Fridge Animations ---
+  maybeCreate("fridge-open", {
+    frames: anims.generateFrameNumbers("fridge", { start: 1, end: 3 }),
+    frameRate: 8,
+    repeat: 0,
+  });
+
+  maybeCreate("fridge-close", {
+    frames: anims.generateFrameNumbers("fridge", { start: 4, end: 6 }),
+    frameRate: 8,
+    repeat: 0,
+  });
 }
