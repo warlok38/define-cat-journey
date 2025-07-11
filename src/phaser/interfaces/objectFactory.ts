@@ -10,7 +10,10 @@ export type ObjectFactoryCreateType =
   | "boxFloorSmall"
   | "boxFloorWide"
   | "boxUpSmall"
-  | "boxUpWide";
+  | "boxUpWide"
+  | "furniture"
+  | "flowerSmall"
+  | "stove";
 
 export interface ObjectFactoryCreateProps {
   type: ObjectFactoryCreateType;

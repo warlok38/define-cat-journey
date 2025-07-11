@@ -23,100 +23,128 @@ export class ObjectFactory {
 
     switch (type) {
       case "fridge": {
-        const fridge = new Fridge(this.scene, x, y, {
-          ...options,
-        });
-        fridge.setCollisionWith(this.hero.getSprite());
-        this.interactables.add(fridge.getSprite());
-        return fridge;
+        const createdObj = new Fridge(this.scene, x, y, options);
+        createdObj.setCollisionWith(this.hero.getSprite());
+        this.interactables.add(createdObj.getSprite());
+        return createdObj;
       }
 
       case "TV": {
-        const TV = new TVObject(this.scene, x, y, {
-          ...options,
-        });
-        TV.setCollisionWith(this.hero.getSprite());
-        this.interactables.add(TV.getSprite());
-        return TV;
+        const createdObj = new TVObject(this.scene, x, y, options);
+        createdObj.setCollisionWith(this.hero.getSprite());
+        this.interactables.add(createdObj.getSprite());
+        return createdObj;
+      }
+
+      case "stove": {
+        const createdObj = new BaseObject(this.scene, x, y, "stove", options);
+        createdObj.setCollisionWith(this.hero.getSprite());
+        return createdObj;
       }
 
       case "chest": {
-        const chest = new BaseObject(this.scene, x, y, "chest", {
-          ...options,
-        });
-        chest.setCollisionWith(this.hero.getSprite());
-        this.interactables.add(chest.getSprite());
-        return chest;
+        const createdObj = new BaseObject(this.scene, x, y, "chest", options);
+        createdObj.setCollisionWith(this.hero.getSprite());
+        this.interactables.add(createdObj.getSprite());
+        return createdObj;
+      }
+
+      case "flowerSmall": {
+        const createdObj = new BaseObject(
+          this.scene,
+          x,
+          y,
+          "flowerSmall",
+          options
+        );
+        createdObj.setCollisionWith(this.hero.getSprite());
+        return createdObj;
       }
 
       case "boxFloorSmall": {
-        const chest = new BaseObject(this.scene, x, y, "boxFloorSmall", {
-          ...options,
-        });
-        chest.setCollisionWith(this.hero.getSprite());
-        return chest;
+        const createdObj = new BaseObject(
+          this.scene,
+          x,
+          y,
+          "boxFloorSmall",
+          options
+        );
+        createdObj.setCollisionWith(this.hero.getSprite());
+        return createdObj;
       }
 
       case "boxFloorWide": {
-        const chest = new BaseObject(this.scene, x, y, "boxFloorWide", {
-          ...options,
-        });
-        chest.setCollisionWith(this.hero.getSprite());
-        return chest;
+        const createdObj = new BaseObject(
+          this.scene,
+          x,
+          y,
+          "boxFloorWide",
+          options
+        );
+        createdObj.setCollisionWith(this.hero.getSprite());
+        return createdObj;
       }
 
       case "boxUpSmall": {
-        const chest = new BaseObject(this.scene, x, y, "boxUpSmall", {
-          ...options,
-        });
-        chest.setCollisionWith(this.hero.getSprite());
-        return chest;
+        const createdObj = new BaseObject(
+          this.scene,
+          x,
+          y,
+          "boxUpSmall",
+          options
+        );
+        createdObj.setCollisionWith(this.hero.getSprite());
+        return createdObj;
       }
 
       case "boxUpWide": {
-        const chest = new BaseObject(this.scene, x, y, "boxUpWide", {
-          ...options,
-        });
-        chest.setCollisionWith(this.hero.getSprite());
-        return chest;
+        const createdObj = new BaseObject(
+          this.scene,
+          x,
+          y,
+          "boxUpWide",
+          options
+        );
+        createdObj.setCollisionWith(this.hero.getSprite());
+        return createdObj;
       }
 
       case "chair": {
-        const chair = new BaseObject(this.scene, x, y, "chairs", {
-          frame: options.frame ?? 0,
-          sizeOffset: { width: -8, height: -36 },
-          offset: { x: 0, y: 10 },
-          depthOffset: -4,
-          ...options,
-        });
-        chair.setCollisionWith(this.hero.getSprite());
-        return chair;
+        const createdObj = new BaseObject(this.scene, x, y, "chairs", options);
+        createdObj.setCollisionWith(this.hero.getSprite());
+        return createdObj;
       }
 
-      case "table": {
-        const table = new BaseObject(this.scene, x, y, "furniture", {
+      case "furniture": {
+        const createdObj = new BaseObject(this.scene, x, y, "furniture", {
           frame: options.frame ?? 1,
           customHitboxes: options.customHitboxes ?? [],
         });
-        table.setCollisionWith(this.hero.getSprite());
-        this.interactables.add(table.getSprite());
-        return table;
+        createdObj.setCollisionWith(this.hero.getSprite());
+        return createdObj;
+      }
+
+      case "table": {
+        const createdObj = new BaseObject(this.scene, x, y, "table", options);
+        createdObj.setCollisionWith(this.hero.getSprite());
+        return createdObj;
       }
 
       case "door": {
-        const door = new HouseDoor(this.scene, x, y);
+        const createdObj = new HouseDoor(this.scene, x, y);
         const collider = this.scene.physics.add.collider(
           this.hero.getSprite(),
-          door.getSprite()
+          createdObj.getSprite()
         );
-        door.setCollider(collider);
-        this.interactables.add(door.getSprite());
-        return door;
+        createdObj.setCollider(collider);
+        this.interactables.add(createdObj.getSprite());
+        return createdObj;
       }
 
       default:
-        console.warn(`Unknown object type: ${type}`);
-        return null;
+        throw new Error(
+          `Object: '${type}' does not exist in ObjectFactory but is specified in types. Please define the object in the factory.`
+        );
     }
   }
 }

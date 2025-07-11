@@ -23,11 +23,16 @@ export function loadAssets(scene: Phaser.Scene) {
     "windowViewGarden",
     "/assets/objects/window-view-garden.png"
   );
+  scene.load.image("stove", "/assets/objects/stove.png");
   scene.load.spritesheet("door", "/assets/objects/door.png", {
     frameWidth: 48,
     frameHeight: 112,
   });
   scene.load.spritesheet("chairs", "/assets/objects/chairs.png", {
+    frameWidth: 32,
+    frameHeight: 64,
+  });
+  scene.load.spritesheet("flowerSmall", "/assets/objects/flowers-small.png", {
     frameWidth: 32,
     frameHeight: 48,
   });

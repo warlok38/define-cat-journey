@@ -64,15 +64,54 @@ export default class MainScene extends Phaser.Scene {
     this.objectFactory = new ObjectFactory(this, this.hero);
     this.objectFactory.create({
       type: "chair",
-      x: 1056,
-      y: 200,
+      x: 32 * 9,
+      y: 32 * 18,
       options: {
+        sizeOffset: { width: -4, height: -40 },
+        offset: { x: 0, y: 12 },
+        depthOffset: -3,
+        frame: 3,
+      },
+    });
+
+    this.objectFactory.create({
+      type: "chair",
+      x: 32 * 13,
+      y: 32 * 18,
+      options: {
+        sizeOffset: { width: -4, height: -40 },
+        offset: { x: 0, y: 12 },
+        depthOffset: -3,
+        frame: 2,
+      },
+    });
+
+    this.objectFactory.create({
+      type: "chair",
+      x: 32 * 11,
+      y: 32 * 17,
+      options: {
+        sizeOffset: { width: -4, height: -40 },
+        offset: { x: 0, y: 12 },
+        depthOffset: -3,
+        frame: 0,
+      },
+    });
+
+    this.objectFactory.create({
+      type: "chair",
+      x: 32 * 11,
+      y: 32 * 19,
+      options: {
+        sizeOffset: { width: -4, height: -40 },
+        offset: { x: 0, y: 12 },
+        depthOffset: -3,
         frame: 1,
       },
     });
 
     const tableFigure = this.objectFactory.create({
-      type: "table",
+      type: "furniture",
       x: 784,
       y: 430,
       options: {
@@ -106,13 +145,107 @@ export default class MainScene extends Phaser.Scene {
 
     this.objectFactory.create({
       type: "fridge",
-      x: 924,
-      y: 480,
+      x: 32 * 14.75,
+      y: 32 * 14 + 8,
     });
+
     this.objectFactory.create({
       type: "boxFloorSmall",
-      x: 224,
-      y: 440,
+      x: 32 * 1.5,
+      y: 32 * 14,
+    });
+
+    this.objectFactory.create({
+      type: "boxFloorSmall",
+      x: 32 * 2.5,
+      y: 32 * 14,
+    });
+
+    this.objectFactory.create({
+      type: "boxFloorSmall",
+      x: 32 * 7.5,
+      y: 32 * 14,
+      options: {
+        frame: 1,
+      },
+    });
+
+    this.objectFactory.create({
+      type: "boxFloorSmall",
+      x: 32 * 10.5,
+      y: 32 * 14,
+    });
+
+    this.objectFactory.create({
+      type: "boxFloorSmall",
+      x: 32 * 13.5,
+      y: 32 * 14,
+    });
+
+    this.objectFactory.create({
+      type: "boxFloorWide",
+      x: 32 * 4,
+      y: 32 * 14,
+    });
+
+    this.objectFactory.create({
+      type: "boxFloorWide",
+      x: 32 * 12,
+      y: 32 * 14,
+    });
+
+    this.objectFactory.create({
+      type: "boxFloorWide",
+      x: 32 * 9,
+      y: 32 * 14,
+      options: {
+        frame: 1,
+      },
+    });
+
+    this.objectFactory.create({
+      type: "stove",
+      x: 32 * 6,
+      y: 32 * 14,
+    });
+
+    this.objectFactory.create({
+      type: "boxUpSmall",
+      x: 32 * 1.5,
+      y: 32 * 11 - 9,
+    });
+
+    this.objectFactory.create({
+      type: "boxUpWide",
+      x: 32 * 3,
+      y: 32 * 11 - 9,
+    });
+
+    this.objectFactory.create({
+      type: "boxUpWide",
+      x: 32 * 9,
+      y: 32 * 11 - 9,
+    });
+
+    const kitchenTable = this.objectFactory.create({
+      type: "table",
+      x: 32 * 11,
+      y: 32 * 18,
+      options: {
+        customHitboxes: [
+          { x: 40, y: 26, width: 10, height: 20 },
+          { x: -40, y: 26, width: 10, height: 20 },
+        ],
+      },
+    });
+
+    this.objectFactory.create({
+      type: "flowerSmall",
+      x: 32 * 11,
+      y: 32 * 17,
+      options: {
+        depthOffset: getVisualBottomY(kitchenTable?.getSprite()) + 1,
+      },
     });
 
     //hero light

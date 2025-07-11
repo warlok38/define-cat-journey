@@ -69,8 +69,8 @@ export class Fridge extends BaseObject implements Interactable {
     const sprite = this.getSprite();
     this.light = this.scene.lights.addLight(
       sprite.x,
-      sprite.y + 16,
-      80,
+      sprite.y + 20,
+      40,
       0xfff0a0,
       0.6
     );

@@ -5,8 +5,8 @@ export const HERO_START_POSITIONS_MAP = {
   mainScene: {
     //delete. this temp for debug
     temp: {
-      // x: 200,
-      x: 800,
+      x: 200, //кухня
+      // x: 800, центр 1 комната
       y: 500,
     },
     mainDoor: {
