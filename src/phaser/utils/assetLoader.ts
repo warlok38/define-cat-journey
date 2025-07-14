@@ -72,6 +72,14 @@ export function loadAssets(scene: Phaser.Scene) {
     frameWidth: 64,
     frameHeight: 47,
   });
+  scene.load.spritesheet("clothesShoes", "/assets/objects/clothes-shoes.png", {
+    frameWidth: 16,
+    frameHeight: 16,
+  });
+  scene.load.spritesheet("thingsBig", "/assets/objects/things-big.png", {
+    frameWidth: 80,
+    frameHeight: 80,
+  });
 
   // Hero: animations
   scene.load.spritesheet(

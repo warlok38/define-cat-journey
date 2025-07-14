@@ -2,7 +2,11 @@ import Phaser from "phaser";
 import { Hero } from "../characters";
 import { setupCamera } from "../utils/camera";
 import { HouseWindow, SceneTransfer } from "../objects";
-import { GRID_SIZE, HERO_START_POSITIONS_MAP } from "../../consts";
+import {
+  BOUNDS_LAYER_DEPTH,
+  GRID_SIZE,
+  HERO_START_POSITIONS_MAP,
+} from "../../consts";
 import { createCollisionFromObject } from "../utils/createCollisionFromObject";
 import type { SceneCreateDTO } from "../interfaces";
 import { LayerFactory, ObjectFactory } from "../managers";
@@ -225,6 +229,67 @@ export default class MainScene extends Phaser.Scene {
       type: "boxUpWide",
       x: 32 * 9,
       y: 32 * 11 - 9,
+    });
+
+    this.objectFactory.create({
+      type: "clothesShoes",
+      x: 32 * 36.66,
+      y: 32 * 7.25,
+    });
+
+    this.objectFactory.create({
+      type: "clothesShoes",
+      x: 32 * 37.33,
+      y: 32 * 7.25,
+      options: {
+        frame: 1,
+      },
+    });
+
+    this.objectFactory.create({
+      type: "clothesShoes",
+      x: 32 * 38,
+      y: 32 * 7.25,
+      options: {
+        frame: 2,
+      },
+    });
+
+    this.objectFactory.create({
+      type: "clothesShoes",
+      x: 32 * 38.66,
+      y: 32 * 7.25,
+      options: {
+        frame: 3,
+      },
+    });
+
+    const thingsBig1 = this.objectFactory.create({
+      type: "thingsBig",
+      x: 32 * 37.66,
+      y: 32 * 4.33,
+    });
+    thingsBig1.getSprite().setDepth(BOUNDS_LAYER_DEPTH + 1);
+
+    this.objectFactory.create({
+      type: "thingsBig",
+      x: 32 * 35.1,
+      y: 32 * 4.2,
+      options: {
+        frame: 2,
+      },
+    });
+
+    this.objectFactory.create({
+      type: "chair",
+      x: 32 * 35.5,
+      y: 32 * 5.75,
+      options: {
+        frame: 5,
+        sizeOffset: { width: -4, height: -40 },
+        offset: { x: 0, y: 12 },
+        depthOffset: -3,
+      },
     });
 
     const kitchenTable = this.objectFactory.create({

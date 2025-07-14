@@ -13,6 +13,8 @@ export type ObjectFactoryCreateType =
   | "boxUpWide"
   | "furniture"
   | "flowerSmall"
+  | "clothesShoes"
+  | "thingsBig"
   | "stove";
 
 export interface ObjectFactoryCreateProps {

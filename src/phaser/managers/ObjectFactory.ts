@@ -22,6 +22,28 @@ export class ObjectFactory {
     const { type, x, y, options = {} } = props;
 
     switch (type) {
+      case "clothesShoes": {
+        const createdObj = new BaseObject(
+          this.scene,
+          x,
+          y,
+          "clothesShoes",
+          options
+        );
+        return createdObj;
+      }
+
+      case "thingsBig": {
+        const createdObj = new BaseObject(
+          this.scene,
+          x,
+          y,
+          "thingsBig",
+          options
+        );
+        return createdObj;
+      }
+
       case "fridge": {
         const createdObj = new Fridge(this.scene, x, y, options);
         createdObj.setCollisionWith(this.hero.getSprite());
