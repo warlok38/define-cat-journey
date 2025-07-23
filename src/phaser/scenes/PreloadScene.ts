@@ -1,61 +1,24 @@
-import Phaser from "phaser";
-import { loadAssets } from "../utils/assetLoader";
-import { createAnimations } from "../utils/createAnimations";
+import * as Phaser from "phaser";
+import { SCENE_KEYS } from "./consts";
+import { ASSET_KEYS, ASSET_PACK_KEYS } from "../shared/consts";
 
-export default class PreloadScene extends Phaser.Scene {
+export class PreloadScene extends Phaser.Scene {
   constructor() {
-    super("PreloadScene");
+    super({
+      key: SCENE_KEYS.PRELOAD_SCENE,
+    });
   }
 
-  preload() {
-    const { width, height } = this.cameras.main;
-
-    const progressBar = this.add.graphics();
-    const progressBox = this.add.graphics();
-    const barWidth = 320;
-    const barHeight = 25;
-
-    progressBox.fillStyle(0x222222, 0.8);
-    progressBox.fillRect(
-      width / 2 - barWidth / 2,
-      height / 2 - barHeight / 2,
-      barWidth,
-      barHeight
-    );
-
-    const loadingText = this.add
-      .text(width / 2, height / 2 - 40, "Loading...", {
-        font: "18px monospace",
-        color: "#ffffff",
-      })
-      .setOrigin(0.5);
-
-    this.load.on("progress", (value: number) => {
-      progressBar.clear();
-      progressBar.fillStyle(0xffffff, 1);
-      progressBar.fillRect(
-        width / 2 - barWidth / 2,
-        height / 2 - barHeight / 2,
-        barWidth * value,
-        barHeight
-      );
-    });
-
-    this.load.on("complete", () => {
-      progressBar.destroy();
-      progressBox.destroy();
-      loadingText.destroy();
-    });
-
-    loadAssets(this);
+  preload(): void {
+    this.load.pack(ASSET_PACK_KEYS.MAIN, "assets/data/assets.json");
   }
 
-  create() {
-    createAnimations(this.anims);
+  create(): void {
+    this.#createAnimations();
+    this.scene.start(SCENE_KEYS.GAME_SCENE);
+  }
 
-    this.scene.start("MainScene", {
-      heroX: 1100,
-      heroY: 200,
-    });
+  #createAnimations(): void {
+    this.anims.createFromAseprite(ASSET_KEYS.HERO);
   }
 }

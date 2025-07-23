@@ -1,0 +1,23 @@
+[
+  {
+    "path": "assets/images/levels",
+    "files": [
+      {
+        "type": "image",
+        "key": "TEST_BACKGROUND",
+        "url": "background-test.png"
+      }
+    ]
+  },
+  {
+    "path": "assets/images/hero",
+    "files": [
+      {
+        "type": "aseprite",
+        "key": "HERO",
+        "textureURL": "hero-cat.png",
+        "atlasURL": "hero-cat.json"
+      }
+    ]
+  }
+]
