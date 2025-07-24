@@ -1,3 +1,6 @@
+import { DIRECTIONS } from "./consts";
+import type { DirectionType } from "./types";
+
 export function exhaustiveGuard(_value: never): never {
   throw new Error(
     `Error! Reached forbidden guard function with unexpected value: ${JSON.stringify(
@@ -17,4 +20,43 @@ export function isArcadePhysicsBody(
     return false;
   }
   return body instanceof Phaser.Physics.Arcade.Body;
+}
+
+export function isDirection(
+  direction: DirectionType
+): direction is DirectionType {
+  return DIRECTIONS[direction] !== undefined;
+}
+
+/**
+ * Creates a flash animation effect by using the built in Phaser 3 Timer Events. The provided game object
+ * will be the target of the effect that is created.
+ * @param {Phaser.GameObjects.Image | Phaser.GameObjects.Sprite} target The target game object that the effect will be applied to.
+ * @param {() => void} [callback] The callback that will be invoked when the tween is finished
+ * @returns {void}
+ */
+export function flash(
+  target: Phaser.GameObjects.Image | Phaser.GameObjects.Sprite,
+  callback?: () => void
+): void {
+  const timeEvent = target.scene.time.addEvent({
+    delay: 250,
+    callback: () => {
+      target.setTintFill(0xffffff);
+      target.setAlpha(0.7);
+
+      target.scene.time.addEvent({
+        delay: 150,
+        callback: () => {
+          target.setTint(0xffffff);
+          target.setAlpha(1);
+          if (timeEvent.getOverallProgress() === 1 && callback) {
+            callback();
+          }
+        },
+      });
+    },
+    startAt: 150,
+    repeat: 3,
+  });
 }

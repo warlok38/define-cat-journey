@@ -19,5 +19,22 @@
         "atlasURL": "hero-cat.json"
       }
     ]
+  },
+  {
+    "path": "assets/images/enemies",
+    "files": [
+      {
+        "type": "aseprite",
+        "key": "SPIDER",
+        "textureURL": "spider.png",
+        "atlasURL": "spider.json"
+      },
+      {
+        "type": "aseprite",
+        "key": "WISP",
+        "textureURL": "wisp.png",
+        "atlasURL": "wisp.json"
+      }
+    ]
   }
 ]
