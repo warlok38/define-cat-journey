@@ -1,74 +1,79 @@
 import type { CharacterGameObject } from "../../../../gameObjects/common/CharacterGameObject";
-import { CHARACTER_STATES, DIRECTIONS } from "../../../../shared/consts";
-import type { DirectionType } from "../../../../shared/types";
-import { isArcadePhysicsBody } from "../../../../shared/utils";
-import { BaseCharacterState } from "./BaseCharacterState";
+import {
+  CHARACTER_STATES,
+  INTERACTIVE_OBJECT_TYPE,
+} from "../../../../shared/consts";
+import { exhaustiveGuard } from "../../../../shared/utils";
+import { CollidingObjects, InteractiveObject } from "../../../baseComponents";
+import type { InputComponent } from "../../../input";
+import { BaseMoveState } from "./BaseMoveState";
 
-export class MoveState extends BaseCharacterState {
+export class MoveState extends BaseMoveState {
   constructor(gameObject: CharacterGameObject) {
-    super(CHARACTER_STATES.MOVE_STATE, gameObject);
+    super(CHARACTER_STATES.MOVE_STATE, gameObject, "WALK");
   }
   onUpdate(): void {
     const controls = this._gameObject.controls;
 
-    if (
-      !controls.isDownDown &&
-      !controls.isUpDown &&
-      !controls.isLeftDown &&
-      !controls.isRightDown
-    ) {
+    if (this.isNoInputMovement(controls)) {
       this._stateMachine.setState(CHARACTER_STATES.IDLE_STATE);
     }
 
-    if (controls.isUpDown) {
-      this.#updateVelocity(false, -1);
-      this.#updateDirection(DIRECTIONS.UP);
-    } else if (controls.isDownDown) {
-      this.#updateVelocity(false, 1);
-      this.#updateDirection(DIRECTIONS.DOWN);
-    } else this.#updateVelocity(false, 0);
-
-    const isMovingVertically = controls.isDownDown || controls.isUpDown;
-    if (controls.isLeftDown) {
-      this.#updateVelocity(true, -1);
-      if (!isMovingVertically) {
-        this.#updateDirection(DIRECTIONS.LEFT);
-      }
-    } else if (controls.isRightDown) {
-      this.#updateVelocity(true, 1);
-      if (!isMovingVertically) {
-        this.#updateDirection(DIRECTIONS.RIGHT);
-      }
-    } else {
-      this.#updateVelocity(true, 0);
-    }
-
-    this.#normalizeVelocity();
-  }
-
-  #updateVelocity(isX: boolean, value: number): void {
-    if (!isArcadePhysicsBody(this._gameObject.body)) {
-      return;
-    }
-    if (isX) {
-      this._gameObject.body.velocity.x = value;
-      return;
-    }
-    this._gameObject.body.velocity.y = value;
-  }
-
-  #normalizeVelocity(): void {
-    if (!isArcadePhysicsBody(this._gameObject.body)) {
+    // if we interacted with an object and switched states, stop processing
+    if (this.#checkIfObjectWasInteractedWith(controls)) {
       return;
     }
 
-    this._gameObject.body.velocity.normalize().scale(this._gameObject.speed);
+    this.handleCharacterMovement();
   }
 
-  #updateDirection(direction: DirectionType): void {
-    this._gameObject.direction = direction;
-    this._gameObject.animation.playAnimation(
-      `WALK_${this._gameObject.direction}`
+  #checkIfObjectWasInteractedWith(controls: InputComponent): boolean {
+    const collideComponent = CollidingObjects.getComponent<CollidingObjects>(
+      this._gameObject
     );
+
+    if (
+      collideComponent === undefined ||
+      collideComponent.objects.length === 0
+    ) {
+      return false;
+    }
+
+    const collisionObject = collideComponent.objects[0];
+    const interactiveObject =
+      InteractiveObject.getComponent<InteractiveObject>(collisionObject);
+    if (interactiveObject === undefined) {
+      return false;
+    }
+    if (!controls.isActionKeyJustDown) {
+      return false;
+    }
+
+    // check if game object can be interacted with
+    if (!interactiveObject.canInteractWith()) {
+      return false;
+    }
+    interactiveObject.interact();
+
+    // we can carry this item
+    if (interactiveObject.objectType === INTERACTIVE_OBJECT_TYPE.PICKUP) {
+      this._stateMachine.setState(CHARACTER_STATES.LIFT_STATE, collisionObject);
+      return true;
+    }
+
+    // we can open this item
+    if (interactiveObject.objectType === INTERACTIVE_OBJECT_TYPE.OPEN) {
+      this._stateMachine.setState(
+        CHARACTER_STATES.OPEN_CHEST_STATE,
+        collisionObject
+      );
+      return true;
+    }
+
+    if (interactiveObject.objectType === INTERACTIVE_OBJECT_TYPE.AUTO) {
+      return false;
+    }
+
+    exhaustiveGuard(interactiveObject.objectType);
   }
 }

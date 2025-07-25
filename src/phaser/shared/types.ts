@@ -1,4 +1,9 @@
-import type { CHARACTER_ANIMATIONS, DIRECTIONS } from "./consts";
+import type {
+  CHARACTER_ANIMATIONS,
+  CHEST_STATE,
+  DIRECTIONS,
+  INTERACTIVE_OBJECT_TYPE,
+} from "./consts";
 
 export type Position = {
   x: number;
@@ -9,6 +14,10 @@ export type GameObject = Phaser.GameObjects.Sprite | Phaser.GameObjects.Image;
 
 export type DirectionType = keyof typeof DIRECTIONS;
 
+export type ChestState = keyof typeof CHEST_STATE;
+
+export type InteractiveObjectType = keyof typeof INTERACTIVE_OBJECT_TYPE;
+
 export type CharacterAnimation = keyof typeof CHARACTER_ANIMATIONS;
 
 export type AnimationConfig = {
@@ -18,3 +27,8 @@ export type AnimationConfig = {
     ignoreIfPlaying: boolean;
   };
 };
+
+export interface CustomGameObject {
+  enableObject(): void;
+  disableObject(): void;
+}

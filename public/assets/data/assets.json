@@ -34,6 +34,34 @@
         "key": "WISP",
         "textureURL": "wisp.png",
         "atlasURL": "wisp.json"
+      },
+      {
+        "type": "spritesheet",
+        "key": "ENEMY_DEATH",
+        "url": "enemy_death.png",
+        "frameConfig": { "frameWidth": 16, "frameHeight": 16 }
+      }
+    ]
+  },
+  {
+    "path": "assets/images/objects",
+    "files": [
+      {
+        "type": "image",
+        "key": "POT",
+        "url": "pot.png"
+      },
+      {
+        "type": "spritesheet",
+        "key": "POT_BREAK",
+        "url": "pot_break.png",
+        "frameConfig": { "frameWidth": 32, "frameHeight": 32 }
+      },
+      {
+        "type": "atlas",
+        "key": "CHEST",
+        "textureURL": "chest.png",
+        "atlasURL": "chest.json"
       }
     ]
   }

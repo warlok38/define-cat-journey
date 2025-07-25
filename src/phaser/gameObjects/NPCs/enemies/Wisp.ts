@@ -3,6 +3,7 @@ import { BounceMoveState } from "../../../core/stateMachine/states";
 import {
   ASSET_KEYS,
   CHARACTER_STATES,
+  ENEMY_WISP_MAX_HEALTH,
   ENEMY_WISP_PULSE_ANIMATION_DURATION,
   ENEMY_WISP_PULSE_ANIMATION_SCALE_X,
   ENEMY_WISP_PULSE_ANIMATION_SCALE_Y,
@@ -43,6 +44,7 @@ export class Wisp extends CharacterGameObject {
       speed: ENEMY_WISP_SPEED,
       inputComponent: new InputComponent(),
       isInvulnerable: true,
+      maxLife: ENEMY_WISP_MAX_HEALTH,
     });
 
     //state machine

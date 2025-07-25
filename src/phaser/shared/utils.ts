@@ -1,5 +1,5 @@
 import { DIRECTIONS } from "./consts";
-import type { DirectionType } from "./types";
+import type { CustomGameObject, DirectionType, GameObject } from "./types";
 
 export function exhaustiveGuard(_value: never): never {
   throw new Error(
@@ -59,4 +59,15 @@ export function flash(
     startAt: 150,
     repeat: 3,
   });
+}
+
+export function isCustomGameObject(
+  gameObject: GameObject
+): gameObject is GameObject & CustomGameObject {
+  return (
+    //@ts-expect-error Element implicitly has an 'any'
+    gameObject["disableObject"] !== undefined &&
+    //@ts-expect-error Element implicitly has an 'any'
+    gameObject["enableObject"] !== undefined
+  );
 }

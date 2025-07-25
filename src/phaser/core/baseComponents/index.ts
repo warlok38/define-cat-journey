@@ -4,3 +4,8 @@ export * from "./Speed";
 export * from "./Direction";
 export * from "./Animation";
 export * from "./Invulnerable";
+export * from "./Life";
+export * from "./CollidingObjects";
+export * from "./InteractiveObject";
+export * from "./HeldGameObject";
+export * from "./ThrowableObject";

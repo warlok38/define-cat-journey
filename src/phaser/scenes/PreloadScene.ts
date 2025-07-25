@@ -22,5 +22,20 @@ export class PreloadScene extends Phaser.Scene {
     this.anims.createFromAseprite(ASSET_KEYS.HERO);
     this.anims.createFromAseprite(ASSET_KEYS.SPIDER);
     this.anims.createFromAseprite(ASSET_KEYS.WISP);
+    this.anims.create({
+      key: ASSET_KEYS.ENEMY_DEATH,
+      frames: this.anims.generateFrameNumbers(ASSET_KEYS.ENEMY_DEATH),
+      frameRate: 6,
+      repeat: 0,
+      delay: 0,
+    });
+    this.anims.create({
+      key: ASSET_KEYS.POT_BREAK,
+      frames: this.anims.generateFrameNumbers(ASSET_KEYS.POT_BREAK),
+      frameRate: 6,
+      repeat: 0,
+      delay: 0,
+      hideOnComplete: true,
+    });
   }
 }

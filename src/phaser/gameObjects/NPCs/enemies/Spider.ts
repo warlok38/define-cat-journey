@@ -1,5 +1,6 @@
 import { InputComponent } from "../../../core/input";
 import {
+  DeathState,
   HurtState,
   IdleState,
   MoveState,
@@ -12,6 +13,7 @@ import {
   ENEMY_SPIDER_CHANGE_DIRECTION_DELAY_MIN,
   ENEMY_SPIDER_CHANGE_DIRECTION_DELAY_WAIT,
   ENEMY_SPIDER_HURT_PUSH_BACK_SPEED,
+  ENEMY_SPIDER_MAX_HEALTH,
   ENEMY_SPIDER_SPEED,
   SPIDER_ANIMATION_KEYS,
 } from "../../../shared/consts";
@@ -40,6 +42,11 @@ export class Spider extends CharacterGameObject {
       repeat: 0,
       ignoreIfPlaying: true,
     };
+    const deathAnimConfig = {
+      key: SPIDER_ANIMATION_KEYS.DEATH,
+      repeat: 0,
+      ignoreIfPlaying: true,
+    };
 
     const animationConfig: AnimationConfig = {
       WALK_DOWN: animConfig,
@@ -54,6 +61,10 @@ export class Spider extends CharacterGameObject {
       HURT_UP: hurtAnimConfig,
       HURT_LEFT: hurtAnimConfig,
       HURT_RIGHT: hurtAnimConfig,
+      DIE_DOWN: deathAnimConfig,
+      DIE_UP: deathAnimConfig,
+      DIE_LEFT: deathAnimConfig,
+      DIE_RIGHT: deathAnimConfig,
     };
 
     super({
@@ -67,6 +78,7 @@ export class Spider extends CharacterGameObject {
       speed: ENEMY_SPIDER_SPEED,
       inputComponent: new InputComponent(),
       isInvulnerable: false,
+      maxLife: ENEMY_SPIDER_MAX_HEALTH,
     });
 
     this._direction.callback = (direction: DirectionType) => {
@@ -79,6 +91,7 @@ export class Spider extends CharacterGameObject {
     this._stateMachine.addState(
       new HurtState(this, ENEMY_SPIDER_HURT_PUSH_BACK_SPEED)
     );
+    this._stateMachine.addState(new DeathState(this));
     this._stateMachine.setState(CHARACTER_STATES.IDLE_STATE);
 
     this.scene.time.addEvent({
