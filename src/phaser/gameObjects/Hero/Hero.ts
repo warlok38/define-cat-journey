@@ -41,8 +41,28 @@ export class Hero extends CharacterGameObject {
         repeat: -1,
         ignoreIfPlaying: true,
       },
+      WALK_DOWN_LEFT: {
+        key: HERO_ANIMATION_KEYS.WALK_DOWN_LEFT,
+        repeat: -1,
+        ignoreIfPlaying: true,
+      },
+      WALK_DOWN_RIGHT: {
+        key: HERO_ANIMATION_KEYS.WALK_DOWN_RIGHT,
+        repeat: -1,
+        ignoreIfPlaying: true,
+      },
       WALK_UP: {
         key: HERO_ANIMATION_KEYS.WALK_UP,
+        repeat: -1,
+        ignoreIfPlaying: true,
+      },
+      WALK_UP_LEFT: {
+        key: HERO_ANIMATION_KEYS.WALK_UP_LEFT,
+        repeat: -1,
+        ignoreIfPlaying: true,
+      },
+      WALK_UP_RIGHT: {
+        key: HERO_ANIMATION_KEYS.WALK_UP_RIGHT,
         repeat: -1,
         ignoreIfPlaying: true,
       },
@@ -61,7 +81,27 @@ export class Hero extends CharacterGameObject {
         repeat: -1,
         ignoreIfPlaying: true,
       },
+      IDLE_DOWN_LEFT: {
+        key: HERO_ANIMATION_KEYS.IDLE_DOWN_LEFT,
+        repeat: -1,
+        ignoreIfPlaying: true,
+      },
+      IDLE_DOWN_RIGHT: {
+        key: HERO_ANIMATION_KEYS.IDLE_DOWN_RIGHT,
+        repeat: -1,
+        ignoreIfPlaying: true,
+      },
       IDLE_UP: {
+        key: HERO_ANIMATION_KEYS.IDLE_UP,
+        repeat: -1,
+        ignoreIfPlaying: true,
+      },
+      IDLE_UP_LEFT: {
+        key: HERO_ANIMATION_KEYS.IDLE_UP_LEFT,
+        repeat: -1,
+        ignoreIfPlaying: true,
+      },
+      IDLE_UP_RIGHT: {
         key: HERO_ANIMATION_KEYS.IDLE_UP,
         repeat: -1,
         ignoreIfPlaying: true,

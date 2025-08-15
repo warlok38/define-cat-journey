@@ -49,6 +49,7 @@ export class HurtState extends BaseCharacterState {
           body.velocity.x = this.#hurtPushBackSpeed;
           break;
         default:
+          //@ts-expect-error TODO add other directions
           exhaustiveGuard(attackDirection);
       }
 

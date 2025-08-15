@@ -8,6 +8,17 @@ import { BaseCharacterState } from "./BaseCharacterState";
 export abstract class BaseMoveState extends BaseCharacterState {
   protected _moveAnimationPrefix: "WALK" | "WALK_HOLD";
 
+  private static readonly DIRECTION_MAP: Record<string, DirectionType> = {
+    "-1,-1": DIRECTIONS.UP_LEFT,
+    "1,-1": DIRECTIONS.UP_RIGHT,
+    "-1,1": DIRECTIONS.DOWN_LEFT,
+    "1,1": DIRECTIONS.DOWN_RIGHT,
+    "-1,0": DIRECTIONS.LEFT,
+    "1,0": DIRECTIONS.RIGHT,
+    "0,-1": DIRECTIONS.UP,
+    "0,1": DIRECTIONS.DOWN,
+  };
+
   constructor(
     stateName: string,
     gameObject: CharacterGameObject,
@@ -31,30 +42,19 @@ export abstract class BaseMoveState extends BaseCharacterState {
   protected handleCharacterMovement(): void {
     const controls = this._gameObject.controls;
 
-    if (controls.isUpDown) {
-      this.updateVelocity(false, -1);
-      this.updateDirection(DIRECTIONS.UP);
-    } else if (controls.isDownDown) {
-      this.updateVelocity(false, 1);
-      this.updateDirection(DIRECTIONS.DOWN);
-    } else this.updateVelocity(false, 0);
+    const dy = controls.isUpDown ? -1 : controls.isDownDown ? 1 : 0;
+    const dx = controls.isLeftDown ? -1 : controls.isRightDown ? 1 : 0;
 
-    const isMovingVertically = controls.isDownDown || controls.isUpDown;
-    if (controls.isLeftDown) {
-      this.updateVelocity(true, -1);
-      if (!isMovingVertically) {
-        this.updateDirection(DIRECTIONS.LEFT);
-      }
-    } else if (controls.isRightDown) {
-      this.updateVelocity(true, 1);
-      if (!isMovingVertically) {
-        this.updateDirection(DIRECTIONS.RIGHT);
-      }
-    } else {
-      this.updateVelocity(true, 0);
-    }
-
+    this.updateVelocity(false, dy);
+    this.updateVelocity(true, dx);
     this.normalizeVelocity();
+
+    if (dx !== 0 || dy !== 0) {
+      const direction =
+        BaseMoveState.DIRECTION_MAP[`${dx},${dy}`] ??
+        this._gameObject.direction;
+      this.updateDirection(direction);
+    }
   }
 
   protected updateVelocity(isX: boolean, value: number): void {
@@ -77,6 +77,7 @@ export abstract class BaseMoveState extends BaseCharacterState {
   }
 
   protected updateDirection(direction: DirectionType): void {
+    console.log(`${this._moveAnimationPrefix}_${this._gameObject.direction}`);
     this._gameObject.direction = direction;
     this._gameObject.animation.playAnimation(
       `${this._moveAnimationPrefix}_${this._gameObject.direction}`
