@@ -87,7 +87,7 @@ export class Spider extends CharacterGameObject {
 
     //state machine
     this._stateMachine.addState(new IdleState(this));
-    this._stateMachine.addState(new MoveState(this));
+    // this._stateMachine.addState(new MoveState(this));
     this._stateMachine.addState(
       new HurtState(this, ENEMY_SPIDER_HURT_PUSH_BACK_SPEED)
     );

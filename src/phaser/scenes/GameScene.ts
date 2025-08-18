@@ -1,11 +1,12 @@
 import { KeyboardComponent } from "../core/input";
 import { Hero } from "../gameObjects";
-import type { CharacterGameObject } from "../gameObjects/common/CharacterGameObject";
+import { CharacterGameObject } from "../gameObjects/common/CharacterGameObject";
 import { Spider, Wisp } from "../gameObjects/NPCs/enemies";
 import { Chest, Pot } from "../gameObjects/objects";
 import { DIRECTIONS, HERO_START_MAX_HEALTH } from "../shared/consts";
 import { CUSTOM_EVENTS, EVENT_BUS } from "../shared/eventBus";
 import type { GameObject } from "../shared/types";
+import { isArcadePhysicsBody } from "../shared/utils";
 import { SCENE_KEYS } from "./consts";
 
 export class GameScene extends Phaser.Scene {
@@ -13,6 +14,7 @@ export class GameScene extends Phaser.Scene {
   #hero!: Hero;
   #enemyGroup!: Phaser.GameObjects.Group;
   #blockingGroup!: Phaser.GameObjects.Group;
+  #potGameObjects!: Pot[];
 
   constructor() {
     super({ key: SCENE_KEYS.GAME_SCENE });
@@ -27,24 +29,27 @@ export class GameScene extends Phaser.Scene {
 
     this.#enemyGroup = this.add.group(
       [
-        // new Spider({
-        //   scene: this,
-        //   position: { x: this.scale.width / 2, y: this.scale.height / 2 + 50 },
-        // }),
-        // new Wisp({
-        //   scene: this,
-        //   position: { x: this.scale.width / 2, y: this.scale.height / 2 - 50 },
-        // }),
+        new Spider({
+          scene: this,
+          position: { x: this.scale.width / 2, y: this.scale.height / 2 + 50 },
+        }),
+        new Wisp({
+          scene: this,
+          position: { x: this.scale.width / 2, y: this.scale.height / 2 - 50 },
+        }),
       ],
       { runChildUpdate: true }
     );
 
-    this.#blockingGroup = this.add.group([
-      new Pot({
-        scene: this,
-        position: { x: this.scale.width / 2 + 90, y: this.scale.height / 2 },
-      }),
+    this.#potGameObjects = [];
+    const pot = new Pot({
+      scene: this,
+      position: { x: this.scale.width / 2 + 90, y: this.scale.height / 2 },
+    });
+    this.#potGameObjects.push(pot);
 
+    this.#blockingGroup = this.add.group([
+      pot,
       new Chest({
         scene: this,
         position: { x: this.scale.width / 2 - 90, y: this.scale.height / 2 },
@@ -84,13 +89,50 @@ export class GameScene extends Phaser.Scene {
       }
     );
 
+    // register collisions between enemies and blocking game objects (doors, pots, chests, etc.)
     this.physics.add.collider(
       this.#enemyGroup,
       this.#blockingGroup,
       (enemy, gameObject) => {
-        //
+        // handle when pot objects are thrown at enemies
+        if (
+          gameObject instanceof Pot &&
+          isArcadePhysicsBody(gameObject.body) &&
+          (gameObject.body.velocity.x !== 0 || gameObject.body.velocity.y !== 0)
+        ) {
+          const enemyGameObject = enemy as CharacterGameObject;
+          if (enemyGameObject instanceof CharacterGameObject) {
+            enemyGameObject.hit(this.#hero.direction, 1);
+            gameObject.break();
+          }
+        }
+      },
+      // handle when objects are thrown on wisps, ignore collisions and let object move through
+      (enemy, gameObject) => {
+        const body = (gameObject as unknown as GameObject).body;
+        if (
+          enemy instanceof Wisp &&
+          isArcadePhysicsBody(body) &&
+          (body.velocity.x !== 0 || body.velocity.y !== 0)
+        ) {
+          return false;
+        }
+        return true;
       }
     );
+
+    if (this.#potGameObjects.length > 0) {
+      this.physics.add.collider(
+        this.#potGameObjects,
+        this.#blockingGroup,
+        (pot) => {
+          if (!(pot instanceof Pot)) {
+            return;
+          }
+          pot.break();
+        }
+      );
+    }
   }
 
   #registerCustomEvents(): void {

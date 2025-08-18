@@ -1,6 +1,5 @@
 import type { CharacterGameObject } from "../../../../gameObjects/common/CharacterGameObject";
 import { CHARACTER_STATES } from "../../../../shared/consts";
-import { isArcadePhysicsBody } from "../../../../shared/utils";
 import { BaseCharacterState } from "./BaseCharacterState";
 
 export class IdleState extends BaseCharacterState {
@@ -13,10 +12,7 @@ export class IdleState extends BaseCharacterState {
       `IDLE_${this._gameObject.direction}`
     );
 
-    if (isArcadePhysicsBody(this._gameObject.body)) {
-      this._gameObject.body.velocity.x = 0;
-      this._gameObject.body.velocity.y = 0;
-    }
+    this._resetObjectVelocity();
   }
 
   onUpdate(): void {

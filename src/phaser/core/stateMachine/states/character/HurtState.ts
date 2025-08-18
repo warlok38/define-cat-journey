@@ -7,6 +7,7 @@ import {
 } from "../../../../shared/consts";
 import type { DirectionType } from "../../../../shared/types";
 import { exhaustiveGuard, isArcadePhysicsBody } from "../../../../shared/utils";
+import { HeldGameObject, ThrowableObject } from "../../../baseComponents";
 import { BaseCharacterState } from "./BaseCharacterState";
 
 export class HurtState extends BaseCharacterState {
@@ -30,17 +31,47 @@ export class HurtState extends BaseCharacterState {
   onEnter(args: unknown[]): void {
     const attackDirection = args[0] as DirectionType;
 
+    this._resetObjectVelocity();
+
+    const heldComponent = HeldGameObject.getComponent<HeldGameObject>(
+      this._gameObject
+    );
+
+    // drop held object
+    if (heldComponent !== undefined && heldComponent.object !== undefined) {
+      const throwObjectComponent =
+        ThrowableObject.getComponent<ThrowableObject>(heldComponent.object);
+      if (throwObjectComponent !== undefined) {
+        throwObjectComponent.drop();
+      }
+      heldComponent.drop();
+    }
+
     if (isArcadePhysicsBody(this._gameObject.body)) {
       const body = this._gameObject.body;
-      body.velocity.x = 0;
-      body.velocity.y = 0;
 
       switch (attackDirection) {
         case DIRECTIONS.DOWN:
           body.velocity.y = this.#hurtPushBackSpeed;
           break;
+        case DIRECTIONS.DOWN_LEFT:
+          body.velocity.y = this.#hurtPushBackSpeed;
+          body.velocity.x = this.#hurtPushBackSpeed * -1;
+          break;
+        case DIRECTIONS.DOWN_RIGHT:
+          body.velocity.y = this.#hurtPushBackSpeed;
+          body.velocity.x = this.#hurtPushBackSpeed;
+          break;
         case DIRECTIONS.UP:
           body.velocity.y = this.#hurtPushBackSpeed * -1;
+          break;
+        case DIRECTIONS.UP_LEFT:
+          body.velocity.y = this.#hurtPushBackSpeed * -1;
+          body.velocity.x = this.#hurtPushBackSpeed * -1;
+          break;
+        case DIRECTIONS.UP_RIGHT:
+          body.velocity.y = this.#hurtPushBackSpeed * -1;
+          body.velocity.x = this.#hurtPushBackSpeed;
           break;
         case DIRECTIONS.LEFT:
           body.velocity.x = this.#hurtPushBackSpeed * -1;
@@ -49,14 +80,12 @@ export class HurtState extends BaseCharacterState {
           body.velocity.x = this.#hurtPushBackSpeed;
           break;
         default:
-          //@ts-expect-error TODO add other directions
           exhaustiveGuard(attackDirection);
       }
 
       // wait a certain amount of time before resetting velocity to stop the push back
       this._gameObject.scene.time.delayedCall(HURT_PUSH_BACK_DELAY, () => {
-        body.velocity.x = 0;
-        body.velocity.y = 0;
+        this._resetObjectVelocity();
       });
     }
 

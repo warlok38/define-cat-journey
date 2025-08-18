@@ -2,7 +2,6 @@ import type { CharacterGameObject } from "../../../../gameObjects/common/Charact
 import type { Chest } from "../../../../gameObjects/objects";
 import { CHARACTER_STATES } from "../../../../shared/consts";
 import { CUSTOM_EVENTS, EVENT_BUS } from "../../../../shared/eventBus";
-import { isArcadePhysicsBody } from "../../../../shared/utils";
 import { BaseCharacterState } from "./BaseCharacterState";
 
 export class OpenChestState extends BaseCharacterState {
@@ -13,10 +12,7 @@ export class OpenChestState extends BaseCharacterState {
   onEnter(args: unknown[]): void {
     const chest = args[0] as Chest;
 
-    if (isArcadePhysicsBody(this._gameObject.body)) {
-      this._gameObject.body.velocity.x = 0;
-      this._gameObject.body.velocity.y = 0;
-    }
+    this._resetObjectVelocity();
 
     this._gameObject.animation.playAnimation(
       `LIFT_${this._gameObject.direction}`,

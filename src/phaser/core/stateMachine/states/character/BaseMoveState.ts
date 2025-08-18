@@ -77,7 +77,6 @@ export abstract class BaseMoveState extends BaseCharacterState {
   }
 
   protected updateDirection(direction: DirectionType): void {
-    console.log(`${this._moveAnimationPrefix}_${this._gameObject.direction}`);
     this._gameObject.direction = direction;
     this._gameObject.animation.playAnimation(
       `${this._moveAnimationPrefix}_${this._gameObject.direction}`

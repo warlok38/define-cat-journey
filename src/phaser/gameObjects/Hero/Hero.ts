@@ -201,8 +201,28 @@ export class Hero extends CharacterGameObject {
         repeat: 0,
         ignoreIfPlaying: true,
       },
+      LIFT_DOWN_LEFT: {
+        key: HERO_ANIMATION_KEYS.LIFT_DOWN_LEFT,
+        repeat: 0,
+        ignoreIfPlaying: true,
+      },
+      LIFT_DOWN_RIGHT: {
+        key: HERO_ANIMATION_KEYS.LIFT_DOWN_RIGHT,
+        repeat: 0,
+        ignoreIfPlaying: true,
+      },
       LIFT_UP: {
         key: HERO_ANIMATION_KEYS.LIFT_UP,
+        repeat: 0,
+        ignoreIfPlaying: true,
+      },
+      LIFT_UP_LEFT: {
+        key: HERO_ANIMATION_KEYS.LIFT_UP_LEFT,
+        repeat: 0,
+        ignoreIfPlaying: true,
+      },
+      LIFT_UP_RIGHT: {
+        key: HERO_ANIMATION_KEYS.LIFT_UP_RIGHT,
         repeat: 0,
         ignoreIfPlaying: true,
       },
