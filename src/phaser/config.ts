@@ -20,7 +20,7 @@ const config: Phaser.Types.Core.GameConfig = {
   },
   physics: {
     default: "arcade",
-    arcade: { debug: true },
+    arcade: { debug: false },
   },
   scene: [PreloadScene, GameScene],
   plugins: {
