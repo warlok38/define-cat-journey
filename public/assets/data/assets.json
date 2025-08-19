@@ -62,6 +62,51 @@
         "key": "CHEST",
         "textureURL": "chest.png",
         "atlasURL": "chest.json"
+      },
+      {
+        "type": "image",
+        "key": "COLLISION",
+        "url": "collision.png"
+      }
+    ]
+  },
+  {
+    "path": "assets/images/levels/house_1",
+    "files": [
+      {
+        "type": "image",
+        "key": "HOUSE_1_BACKGROUND",
+        "url": "house_1_background.png"
+      },
+      {
+        "type": "image",
+        "key": "HOUSE_1_FOREGROUND",
+        "url": "house_1_foreground.png"
+      },
+      {
+        "type": "tilemapTiledJSON",
+        "key": "HOUSE_1_LEVEL",
+        "url": "house_1.json"
+      }
+    ]
+  },
+  {
+    "path": "assets/images/levels/basement",
+    "files": [
+      {
+        "type": "image",
+        "key": "BASEMENT_BACKGROUND",
+        "url": "basement_background.png"
+      },
+      {
+        "type": "image",
+        "key": "BASEMENT_FOREGROUND",
+        "url": "basement_foreground.png"
+      },
+      {
+        "type": "tilemapTiledJSON",
+        "key": "BASEMENT_LEVEL",
+        "url": "basement.json"
       }
     ]
   }

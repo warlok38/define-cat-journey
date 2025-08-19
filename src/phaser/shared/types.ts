@@ -3,6 +3,8 @@ import type {
   CHEST_STATE,
   DIRECTIONS,
   INTERACTIVE_OBJECT_TYPE,
+  LEVEL_NAME,
+  ROOM_CODES,
 } from "./consts";
 
 export type Position = {
@@ -32,3 +34,12 @@ export interface CustomGameObject {
   enableObject(): void;
   disableObject(): void;
 }
+
+export type LevelName = keyof typeof LEVEL_NAME;
+export type RoomCodes = keyof typeof ROOM_CODES;
+
+export type LevelData = {
+  level: LevelName;
+  doorId: number;
+  roomCode: RoomCodes;
+};

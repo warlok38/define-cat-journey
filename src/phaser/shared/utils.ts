@@ -1,5 +1,11 @@
-import { DIRECTIONS } from "./consts";
-import type { CustomGameObject, DirectionType, GameObject } from "./types";
+import { DIRECTIONS, LEVEL_NAME } from "./consts";
+import type {
+  CustomGameObject,
+  DirectionType,
+  GameObject,
+  LevelName,
+  Position,
+} from "./types";
 
 export function exhaustiveGuard(_value: never): never {
   throw new Error(
@@ -22,10 +28,8 @@ export function isArcadePhysicsBody(
   return body instanceof Phaser.Physics.Arcade.Body;
 }
 
-export function isDirection(
-  direction: DirectionType
-): direction is DirectionType {
-  return DIRECTIONS[direction] !== undefined;
+export function isDirection(direction: string): direction is DirectionType {
+  return direction in DIRECTIONS;
 }
 
 /**
@@ -70,4 +74,24 @@ export function isCustomGameObject(
     //@ts-expect-error Element implicitly has an 'any'
     gameObject["enableObject"] !== undefined
   );
+}
+
+export function getDirectionOfObjectFromAnotherObject(
+  object: Position,
+  targetObject: Position
+): DirectionType {
+  if (object.y < targetObject.y) {
+    return DIRECTIONS.DOWN;
+  }
+  if (object.y > targetObject.y) {
+    return DIRECTIONS.UP;
+  }
+  if (object.x < targetObject.x) {
+    return DIRECTIONS.RIGHT;
+  }
+  return DIRECTIONS.LEFT;
+}
+
+export function isLevelName(levelName: string): levelName is LevelName {
+  return levelName in LEVEL_NAME;
 }

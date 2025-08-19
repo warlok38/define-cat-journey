@@ -89,5 +89,6 @@ export class InputComponent {
     this.#right = false;
     this.#actionKey = false;
     this.#runKey = false;
+    this.isMovementLocked = false;
   }
 }

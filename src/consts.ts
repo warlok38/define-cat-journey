@@ -20,7 +20,11 @@ export const HERO_START_POSITIONS_MAP = {
     },
     basementStairs: {
       x: 1200,
-      y: 470,
+      y: 380,
+    },
+    nearKitchen: {
+      x: 620,
+      y: 450,
     },
   },
   basementScene: {
