@@ -5,29 +5,40 @@ import {
   CHEST_STATE,
   INTERACTIVE_OBJECT_TYPE,
 } from "../../shared/consts";
-import type { ChestState, Position } from "../../shared/types";
+import { TRAP_TYPE } from "../../shared/tiled/common";
+import type {
+  ChestReward,
+  TiledChestObject,
+  TrapType,
+} from "../../shared/tiled/types";
+import type { ChestState, CustomGameObject } from "../../shared/types";
 
-type ChestConfig = {
-  scene: Phaser.Scene;
-  position: Position;
-  requiresBossKey: boolean;
-  chestState?: ChestState;
-};
-
-export class Chest extends Phaser.Physics.Arcade.Image {
+export class Chest
+  extends Phaser.Physics.Arcade.Image
+  implements CustomGameObject
+{
   #state: ChestState;
   #isBossKeyChest: boolean;
+  #id: number;
+  #revealTrigger: TrapType;
+  #contents: ChestReward;
 
-  constructor(config: ChestConfig) {
-    const { scene, position } = config;
-    super(scene, position.x, position.y, ASSET_KEYS.CHEST, 0);
+  constructor(
+    scene: Phaser.Scene,
+    config: TiledChestObject,
+    chestState = CHEST_STATE.HIDDEN
+  ) {
+    super(scene, config.x, config.y, ASSET_KEYS.CHEST, 0);
 
     scene.add.existing(this);
     scene.physics.add.existing(this);
     this.setOrigin(0, 1).setImmovable(true);
 
-    this.#state = config.chestState || CHEST_STATE.HIDDEN;
+    this.#state = chestState;
     this.#isBossKeyChest = config.requiresBossKey;
+    this.#id = config.id;
+    this.#revealTrigger = config.revealChestTrigger;
+    this.#contents = config.contents;
 
     if (this.#isBossKeyChest) {
       (this.body as Phaser.Physics.Arcade.Body).setSize(32, 24).setOffset(0, 8);
@@ -47,6 +58,27 @@ export class Chest extends Phaser.Physics.Arcade.Image {
         this.open();
       }
     );
+
+    if (this.#revealTrigger === TRAP_TYPE.NONE) {
+      if (this.#state === CHEST_STATE.HIDDEN) {
+        this.#state = CHEST_STATE.REVEALED;
+      }
+      return;
+    }
+    // disable physics body and make game objects inactive/not visible
+    this.disableObject();
+  }
+
+  get revealTrigger(): TrapType {
+    return this.#revealTrigger;
+  }
+
+  get id(): number {
+    return this.#id;
+  }
+
+  get contents(): ChestReward {
+    return this.#contents;
   }
 
   open(): void {
@@ -62,5 +94,33 @@ export class Chest extends Phaser.Physics.Arcade.Image {
 
     // after we open the chest, we can no longer interact with it
     InteractiveObject.removeComponent(this);
+  }
+
+  public disableObject(): void {
+    // disable body on game object so we stop triggering the collision
+    (this.body as Phaser.Physics.Arcade.Body).enable = false;
+    // make not visible until player re-enters room
+    this.active = false;
+    this.visible = false;
+  }
+
+  public enableObject(): void {
+    if (this.#state === CHEST_STATE.HIDDEN) {
+      return;
+    }
+
+    // enable body on game object so we trigger the collision
+    (this.body as Phaser.Physics.Arcade.Body).enable = true;
+    // make visible to the player
+    this.active = true;
+    this.visible = true;
+  }
+
+  public reveal(): void {
+    if (this.#state !== CHEST_STATE.HIDDEN) {
+      return;
+    }
+    this.#state = CHEST_STATE.REVEALED;
+    this.enableObject();
   }
 }

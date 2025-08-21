@@ -21,8 +21,8 @@ export const DOOR_TYPE = {
   OPEN: "OPEN",
   LOCK: "LOCK",
   TRAP: "TRAP",
-  BOSS: "BOSS",
   OPEN_ENTRANCE: "OPEN_ENTRANCE",
+  NONE: "NONE",
 } as const;
 
 export const TRAP_TYPE = {

@@ -3,6 +3,7 @@ import {
   CHARACTER_ANIMATIONS,
   CHARACTER_STATES,
 } from "../../../../shared/consts";
+import { CUSTOM_EVENTS, EVENT_BUS } from "../../../../shared/eventBus";
 import { HeldGameObject, ThrowableObject } from "../../../baseComponents";
 import { BaseCharacterState } from "./BaseCharacterState";
 
@@ -50,6 +51,12 @@ export class DeathState extends BaseCharacterState {
 
   #triggerDefeatedEvent(): void {
     this._gameObject.disableObject();
+
+    if (this._gameObject.isEnemy) {
+      EVENT_BUS.emit(CUSTOM_EVENTS.ENEMY_DESTROYED);
+    } else {
+      EVENT_BUS.emit(CUSTOM_EVENTS.HERO_DEFEATED);
+    }
 
     this.#onDieCallback();
   }

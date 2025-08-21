@@ -29,6 +29,8 @@ export const ASSET_KEYS = {
   POT: "POT",
   POT_BREAK: "POT_BREAK",
   CHEST: "CHEST",
+  DOOR: "DOOR",
+  BUTTON: "BUTTON",
   COLLISION: "COLLISION",
   HOUSE_1_LEVEL: "HOUSE_1_LEVEL",
   HOUSE_1_BACKGROUND: "HOUSE_1_BACKGROUND",
@@ -223,4 +225,15 @@ export const ROOM_CODES = {
 export const LEVEL_NAME = {
   HOUSE_1: "HOUSE_1",
   BASEMENT: "BASEMENT",
+} as const;
+
+export const DOOR_FRAME_KEYS = {
+  LOCK: 0,
+  TRAP: 0,
+  OPEN: 4,
+} as const;
+
+export const BUTTON_FRAME_KEYS = {
+  BUTTON_DEFAULT: "button_default",
+  BUTTON_PRESSED: "button_pressed",
 } as const;

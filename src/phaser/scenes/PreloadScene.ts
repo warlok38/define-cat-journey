@@ -26,7 +26,7 @@ export class PreloadScene extends Phaser.Scene {
     const sceneData: LevelData = {
       level: LEVEL_NAME.HOUSE_1,
       roomCode: ROOM_CODES.ENTRANCE,
-      doorId: 3,
+      doorId: 0,
     };
     this.scene.start(SCENE_KEYS.GAME_SCENE, sceneData);
   }

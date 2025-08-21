@@ -64,6 +64,18 @@
         "atlasURL": "chest.json"
       },
       {
+        "type": "atlas",
+        "key": "DOOR",
+        "textureURL": "door.png",
+        "atlasURL": "door.json"
+      },
+      {
+        "type": "atlas",
+        "key": "BUTTON",
+        "textureURL": "button.png",
+        "atlasURL": "button.json"
+      },
+      {
         "type": "image",
         "key": "COLLISION",
         "url": "collision.png"
