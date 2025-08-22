@@ -1,18 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Phaser from "phaser";
 import phaserConfig from "../phaser/config";
 
-let game: Phaser.Game | null = null;
-
 const GameCanvas: React.FC = () => {
+  const gameRef = useRef<Phaser.Game | null>(null);
+
   useEffect(() => {
-    if (!game) {
-      game = new Phaser.Game(phaserConfig);
+    if (!gameRef.current) {
+      gameRef.current = new Phaser.Game(phaserConfig);
     }
 
     return () => {
-      game?.destroy(true);
-      game = null;
+      if (gameRef.current) {
+        gameRef.current.destroy(true);
+        gameRef.current = null;
+      }
     };
   }, []);
 
