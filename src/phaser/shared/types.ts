@@ -2,6 +2,7 @@ import type {
   CHARACTER_ANIMATIONS,
   CHEST_STATE,
   DIRECTIONS,
+  HOUSE_ITEM,
   INTERACTIVE_OBJECT_TYPE,
   LEVEL_NAME,
   ROOM_CODES,
@@ -43,3 +44,5 @@ export type LevelData = {
   doorId: number;
   roomCode: RoomCodes;
 };
+
+export type HouseItem = keyof typeof HOUSE_ITEM;

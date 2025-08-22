@@ -1,13 +1,16 @@
 import { KeyboardComponent } from "../core/input";
+import { InventoryManager } from "../core/inventory";
 import { Hero } from "../gameObjects";
 import { CharacterGameObject } from "../gameObjects/common/CharacterGameObject";
 import { Spider, Wisp } from "../gameObjects/NPCs/enemies";
 import { Button, Chest, Door, Pot } from "../gameObjects/objects";
 import {
   ASSET_KEYS,
+  CHEST_REWARD_TO_TEXTURE_FRAME,
   DIRECTIONS,
   ENABLE_DEBUGGING,
   HERO_START_MAX_HEALTH,
+  LEVEL_NAME,
   ROOM_TRANSITION_CAMERA_ANIMATION_DELAY,
   ROOM_TRANSITION_CAMERA_ANIMATION_DURATION,
   ROOM_TRANSITION_PLAYER_INTO_HALL_DELAY,
@@ -17,6 +20,7 @@ import {
 } from "../shared/consts";
 import { CUSTOM_EVENTS, EVENT_BUS } from "../shared/eventBus";
 import {
+  CHEST_REWARD,
   DOOR_TYPE,
   SWITCH_ACTION,
   TILED_LAYER_NAMES,
@@ -65,6 +69,7 @@ export class GameScene extends Phaser.Scene {
   #currentRoomCode!: RoomCodes;
   #lockedDoorGroup!: Phaser.GameObjects.Group;
   #switchGroup!: Phaser.GameObjects.Group;
+  #rewardItem!: Phaser.GameObjects.Image;
 
   constructor() {
     super({ key: SCENE_KEYS.GAME_SCENE });
@@ -89,6 +94,10 @@ export class GameScene extends Phaser.Scene {
     }
     this.#setupHero();
     this.#setupCamera();
+    this.#rewardItem = this.add
+      .image(0, 0, ASSET_KEYS.UI_ICONS, 0)
+      .setVisible(false)
+      .setOrigin(0, 1);
 
     this.#registerColliders();
     this.#registerCustomEvents();
@@ -238,7 +247,33 @@ export class GameScene extends Phaser.Scene {
   }
 
   #handleOpenChest(chest: Chest): void {
-    console.log("chest opened");
+    if (chest.contents !== CHEST_REWARD.NOTHING) {
+      // updated game inventory
+      InventoryManager.instance.addHouseItem(
+        this.#levelData.level,
+        chest.contents
+      );
+    }
+
+    // show reward from chest
+    this.#rewardItem
+      .setFrame(CHEST_REWARD_TO_TEXTURE_FRAME[chest.contents])
+      .setVisible(true)
+      .setPosition(chest.x, chest.y);
+
+    this.tweens.add({
+      targets: this.#rewardItem,
+      y: this.#rewardItem.y - 16,
+      duration: 500,
+      onComplete: () => {
+        this.time.delayedCall(1000, () => {
+          this.#rewardItem.setVisible(false);
+        });
+        console.log(
+          InventoryManager.instance.getAreaInventory(LEVEL_NAME.HOUSE_1)
+        );
+      },
+    });
   }
 
   #createLevel(): void {

@@ -38,6 +38,7 @@ export const ASSET_KEYS = {
   BASEMENT_LEVEL: "BASEMENT_LEVEL",
   BASEMENT_BACKGROUND: "BASEMENT_BACKGROUND",
   BASEMENT_FOREGROUND: "BASEMENT_FOREGROUND",
+  UI_ICONS: "UI_ICONS",
 } as const;
 
 export const DIRECTIONS = {
@@ -227,6 +228,12 @@ export const LEVEL_NAME = {
   BASEMENT: "BASEMENT",
 } as const;
 
+export const HOUSE_ITEM = {
+  SMALL_KEY: "SMALL_KEY",
+  MAP: "MAP",
+  COMPASS: "COMPASS",
+} as const;
+
 export const DOOR_FRAME_KEYS = {
   LOCK: 0,
   TRAP: 0,
@@ -236,4 +243,13 @@ export const DOOR_FRAME_KEYS = {
 export const BUTTON_FRAME_KEYS = {
   BUTTON_DEFAULT: "button_default",
   BUTTON_PRESSED: "button_pressed",
+} as const;
+
+//temp
+export const CHEST_REWARD_TO_TEXTURE_FRAME = {
+  SMALL_KEY: 119,
+  BOSS_KEY: 121,
+  MAP: 117,
+  COMPASS: 118,
+  NOTHING: 126,
 } as const;

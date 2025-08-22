@@ -121,5 +121,16 @@
         "url": "basement.json"
       }
     ]
+  },
+  {
+    "path": "assets/images/ui",
+    "files": [
+      {
+        "type": "spritesheet",
+        "key": "UI_ICONS",
+        "url": "icons.png",
+        "frameConfig": { "frameWidth": 16, "frameHeight": 16 }
+      }
+    ]
   }
 ]

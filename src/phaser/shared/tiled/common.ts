@@ -44,7 +44,6 @@ export const TILED_DOOR_OBJECT_PROPERTY = {
 
 export const CHEST_REWARD = {
   SMALL_KEY: "SMALL_KEY",
-  BOSS_KEY: "BOSS_KEY",
   MAP: "MAP",
   COMPASS: "COMPASS",
   NOTHING: "NOTHING",
