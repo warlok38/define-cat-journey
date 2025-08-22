@@ -1,6 +1,11 @@
-import { CollidingObjects, HeldGameObject } from "../../core/baseComponents";
+import {
+  CollidingObjects,
+  HeldGameObject,
+  Weapon,
+} from "../../core/baseComponents";
 import { InputComponent } from "../../core/input";
 import {
+  AttackState,
   DeathState,
   HurtState,
   IdleHoldingState,
@@ -15,6 +20,7 @@ import {
   ASSET_KEYS,
   CHARACTER_STATES,
   HERO_ANIMATION_KEYS,
+  HERO_ATTACK_DAMAGE,
   HERO_HURT_PUSH_BACK_SPEED,
   HERO_INVULNERABLE_AFTER_HIT_DURATION,
   HERO_SPEED,
@@ -22,6 +28,7 @@ import {
 import type { AnimationConfig, GameObject, Position } from "../../shared/types";
 import { flash } from "../../shared/utils";
 import { CharacterGameObject } from "../common/CharacterGameObject";
+import { Claws } from "../weapons";
 
 export type HeroConfig = {
   scene: Phaser.Scene;
@@ -33,6 +40,7 @@ export type HeroConfig = {
 
 export class Hero extends CharacterGameObject {
   #collidingObjects: CollidingObjects;
+  #weapon: Weapon;
 
   constructor(config: HeroConfig) {
     const animationConfig: AnimationConfig = {
@@ -258,6 +266,22 @@ export class Hero extends CharacterGameObject {
     //components
     this.#collidingObjects = new CollidingObjects(this);
     new HeldGameObject(this);
+    this.#weapon = new Weapon(this);
+    this.#weapon.weapon = new Claws(
+      this,
+      this.#weapon,
+      {
+        DOWN: HERO_ANIMATION_KEYS.ATTACK_CLAWS_DOWN,
+        DOWN_LEFT: HERO_ANIMATION_KEYS.ATTACK_CLAWS_DOWN_LEFT,
+        DOWN_RIGHT: HERO_ANIMATION_KEYS.ATTACK_CLAWS_DOWN_RIGHT,
+        UP: HERO_ANIMATION_KEYS.ATTACK_CLAWS_UP,
+        UP_LEFT: HERO_ANIMATION_KEYS.ATTACK_CLAWS_UP_LEFT,
+        UP_RIGHT: HERO_ANIMATION_KEYS.ATTACK_CLAWS_UP_RIGHT,
+        LEFT: HERO_ANIMATION_KEYS.ATTACK_CLAWS_LEFT,
+        RIGHT: HERO_ANIMATION_KEYS.ATTACK_CLAWS_RIGHT,
+      },
+      HERO_ATTACK_DAMAGE
+    );
 
     //state machine
     this._stateMachine.addState(new IdleState(this));
@@ -273,12 +297,18 @@ export class Hero extends CharacterGameObject {
     this._stateMachine.addState(new IdleHoldingState(this));
     this._stateMachine.addState(new MoveHoldingState(this));
     this._stateMachine.addState(new ThrowState(this));
+    this._stateMachine.addState(new AttackState(this));
     this._stateMachine.setState(CHARACTER_STATES.IDLE_STATE);
 
+    // enable auto update functionality
     config.scene.events.on(Phaser.Scenes.Events.UPDATE, this.update, this);
-    config.scene.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
-      config.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);
-    });
+    config.scene.events.once(
+      Phaser.Scenes.Events.SHUTDOWN,
+      () => {
+        config.scene.events.off(Phaser.Scenes.Events.UPDATE, this.update, this);
+      },
+      this
+    );
 
     this.physicsBody
       .setSize(16, 12, true)
@@ -289,6 +319,10 @@ export class Hero extends CharacterGameObject {
     return this.body as Phaser.Physics.Arcade.Body;
   }
 
+  get weapon(): Weapon {
+    return this.#weapon;
+  }
+
   collidedWithGameObject(gameObject: GameObject): void {
     this.#collidingObjects.add(gameObject);
   }
@@ -296,5 +330,6 @@ export class Hero extends CharacterGameObject {
   update(): void {
     super.update();
     this.#collidingObjects.reset();
+    this.#weapon.update();
   }
 }

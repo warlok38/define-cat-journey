@@ -93,7 +93,12 @@ export class Spider extends CharacterGameObject {
     );
     this._stateMachine.addState(new DeathState(this));
     this._stateMachine.setState(CHARACTER_STATES.IDLE_STATE);
+  }
 
+  enableObject(): void {
+    super.enableObject();
+
+    // start simple ai movement pattern
     this.scene.time.addEvent({
       delay: Phaser.Math.Between(
         ENEMY_SPIDER_CHANGE_DIRECTION_DELAY_MIN,
@@ -127,6 +132,10 @@ export class Spider extends CharacterGameObject {
   #changeDirection(): void {
     // reset existing enemy input
     this.controls.reset();
+
+    if (!this.active) {
+      return;
+    }
 
     // wait a small period of time and then choose a random direction to move
     this.scene.time.delayedCall(

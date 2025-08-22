@@ -28,10 +28,10 @@ export class Button
     this.#switchAction = config.action;
 
     // disable physics body and make game objects inactive/not visible
-    // this.disableObject();
+    this.disableObject();
   }
 
-  public press(): ButtonPressedEvent {
+  press(): ButtonPressedEvent {
     this.disableObject();
 
     // return data about button being pressed with metadata tied to action
@@ -41,7 +41,7 @@ export class Button
     };
   }
 
-  public disableObject(): void {
+  disableObject(): void {
     // disable body on game object so we stop triggering the collision
     (this.body as Phaser.Physics.Arcade.Body).enable = false;
     // make not visible until player re-enters room
@@ -50,7 +50,7 @@ export class Button
     // this.visible = false;
   }
 
-  public enableObject(): void {
+  enableObject(): void {
     (this.body as Phaser.Physics.Arcade.Body).enable = true;
     this.active = true;
     this.setFrame(BUTTON_FRAME_KEYS.BUTTON_DEFAULT);

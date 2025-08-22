@@ -65,6 +65,7 @@ export class Chest
       }
       return;
     }
+
     // disable physics body and make game objects inactive/not visible
     this.disableObject();
   }

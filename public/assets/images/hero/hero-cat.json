@@ -1542,6 +1542,30 @@
     "spriteSourceSize": { "x": 3, "y": 0, "w": 42, "h": 32 },
     "sourceSize": { "w": 48, "h": 32 },
     "duration": 100
+   },
+   "193": {
+    "frame": { "x": 1, "y": 456, "w": 44, "h": 34 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 0, "w": 42, "h": 32 },
+    "sourceSize": { "w": 48, "h": 32 },
+    "duration": 100
+   },
+   "194": {
+    "frame": { "x": 46, "y": 456, "w": 44, "h": 34 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 0, "w": 42, "h": 32 },
+    "sourceSize": { "w": 48, "h": 32 },
+    "duration": 100
+   },
+   "195": {
+    "frame": { "x": 91, "y": 456, "w": 44, "h": 34 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 3, "y": 0, "w": 42, "h": 32 },
+    "sourceSize": { "w": 48, "h": 32 },
+    "duration": 100
    }
  },
  "meta": {
@@ -1549,7 +1573,7 @@
   "version": "1.3.10.1-dev",
   "image": "hero-cat.png",
   "format": "RGBA8888",
-  "size": { "w": 631, "h": 456 },
+  "size": { "w": 631, "h": 491 },
   "scale": "1",
   "frameTags": [
    { "name": "idle", "from": 0, "to": 79, "direction": "forward", "color": "#000000ff" },
@@ -1570,7 +1594,7 @@
    { "name": "walk_UL", "from": 120, "to": 127, "direction": "forward", "color": "#000000ff" },
    { "name": "walk_L", "from": 128, "to": 135, "direction": "forward", "color": "#000000ff" },
    { "name": "walk_DL", "from": 136, "to": 143, "direction": "forward", "color": "#000000ff" },
-   { "name": "lift", "from": 144, "to": 192, "direction": "forward", "color": "#000000ff" },
+   { "name": "lift", "from": 144, "to": 191, "direction": "forward", "color": "#000000ff" },
    { "name": "lift_D", "from": 144, "to": 149, "direction": "forward", "color": "#000000ff" },
    { "name": "lift_DR", "from": 150, "to": 155, "direction": "forward", "color": "#000000ff" },
    { "name": "lift_R", "from": 156, "to": 161, "direction": "forward", "color": "#000000ff" },
@@ -1578,7 +1602,9 @@
    { "name": "lift_U", "from": 168, "to": 173, "direction": "forward", "color": "#000000ff" },
    { "name": "lift_UL", "from": 174, "to": 179, "direction": "forward", "color": "#000000ff" },
    { "name": "lift_L", "from": 180, "to": 185, "direction": "forward", "color": "#000000ff" },
-   { "name": "lift_DL", "from": 186, "to": 191, "direction": "forward", "color": "#000000ff" }
+   { "name": "lift_DL", "from": 186, "to": 191, "direction": "forward", "color": "#000000ff" },
+   { "name": "attack_claws", "from": 192, "to": 195, "direction": "forward", "color": "#000000ff" },
+   { "name": "attack_claws_D", "from": 192, "to": 195, "direction": "forward", "color": "#000000ff" }
   ]
  }
 }

@@ -4,14 +4,17 @@ import { InputComponent } from "./InputComponent";
 export class KeyboardComponent extends InputComponent {
   #cursorKeys: Phaser.Types.Input.Keyboard.CursorKeys;
   #actionKey: Phaser.Input.Keyboard.Key;
+  #attackKey: Phaser.Input.Keyboard.Key;
 
   constructor(keyboardPlugin: Phaser.Input.Keyboard.KeyboardPlugin) {
     super();
     this.#cursorKeys = keyboardPlugin.createCursorKeys();
     this.#actionKey = keyboardPlugin.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+    this.#attackKey = keyboardPlugin.addKey(Phaser.Input.Keyboard.KeyCodes.F);
 
-    // e - for interacting
+    // e - interact
     // shift - run, move faster
+    // F - attack
   }
 
   get isUpDown(): boolean {
@@ -44,5 +47,9 @@ export class KeyboardComponent extends InputComponent {
 
   get isRunKeyJustDown(): boolean {
     return Phaser.Input.Keyboard.JustDown(this.#cursorKeys.shift);
+  }
+
+  get isAttackKeyJustDown(): boolean {
+    return Phaser.Input.Keyboard.JustDown(this.#attackKey);
   }
 }

@@ -141,6 +141,7 @@ export const HERO_START_MAX_HEALTH = 6;
 export const HERO_SPEED = 80;
 export const HERO_INVULNERABLE_AFTER_HIT_DURATION = 1000;
 export const HERO_HURT_PUSH_BACK_SPEED = 50;
+export const HERO_ATTACK_DAMAGE = 1;
 export const HERO_ANIMATION_KEYS = {
   IDLE_DOWN: "idle_D",
   IDLE_DOWN_LEFT: "idle_DL",
@@ -191,6 +192,22 @@ export const HERO_ANIMATION_KEYS = {
   DIE_UP: "idle_D",
   DIE_LEFT: "idle_D",
   DIE_RIGHT: "idle_D",
+  ATTACK_CLAWS_DOWN: "attack_claws_D",
+  ATTACK_CLAWS_DOWN_LEFT: "attack_claws_D",
+  ATTACK_CLAWS_DOWN_RIGHT: "attack_claws_D",
+  ATTACK_CLAWS_UP: "attack_claws_D",
+  ATTACK_CLAWS_UP_LEFT: "attack_claws_D",
+  ATTACK_CLAWS_UP_RIGHT: "attack_claws_D",
+  ATTACK_CLAWS_LEFT: "attack_claws_D",
+  ATTACK_CLAWS_RIGHT: "attack_claws_D",
+  // ATTACK_CLAWS_DOWN: "attack_claws_D",
+  // ATTACK_CLAWS_DOWN_LEFT: "attack_claws_DL",
+  // ATTACK_CLAWS_DOWN_RIGHT: "attack_claws_DR",
+  // ATTACK_CLAWS_UP: "attack_claws_U",
+  // ATTACK_CLAWS_UP_LEFT: "attack_claws_UL",
+  // ATTACK_CLAWS_UP_RIGHT: "attack_claws_UR",
+  // ATTACK_CLAWS_LEFT: "attack_claws_L",
+  // ATTACK_CLAWS_RIGHT: "attack_claws_R",
 } as const;
 
 //npcs

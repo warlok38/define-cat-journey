@@ -9,3 +9,4 @@ export * from "./OpenChestState";
 export * from "./IdleHoldingState";
 export * from "./MoveHoldingState";
 export * from "./ThrowState";
+export * from "./AttackState";

@@ -82,6 +82,10 @@ export abstract class CharacterGameObject
 
     this._isPlayer = isPlayer;
     this._isDefeated = false;
+
+    if (!this._isPlayer) {
+      this.disableObject();
+    }
   }
 
   get isDefeated(): boolean {
@@ -115,6 +119,10 @@ export abstract class CharacterGameObject
 
   get invulnerable(): Invulnerable {
     return this._invulnerable;
+  }
+
+  get stateMachine(): StateMachine {
+    return this._stateMachine;
   }
 
   update(): void {

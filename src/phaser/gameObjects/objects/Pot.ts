@@ -22,6 +22,9 @@ export class Pot
     new ThrowableObject(this, () => {
       this.break();
     });
+
+    // disable physics body and make game objects inactive/not visible
+    this.disableObject();
   }
 
   disableObject(): void {
@@ -51,5 +54,12 @@ export class Pot
         this.disableObject();
       }
     );
+  }
+
+  resetPosition(): void {
+    this.scene.time.delayedCall(1, () => {
+      this.setPosition(this.#position.x, this.#position.y).setOrigin(0, 1);
+      this.enableObject();
+    });
   }
 }

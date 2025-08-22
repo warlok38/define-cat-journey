@@ -9,3 +9,4 @@ export * from "./CollidingObjects";
 export * from "./InteractiveObject";
 export * from "./HeldGameObject";
 export * from "./ThrowableObject";
+export * from "./Weapon";
