@@ -68,7 +68,6 @@ export class StateMachine {
     if (this.#currentState.onEnter) {
       this.#log(methodName, `${this.#currentState.name} on enter invoked`);
       this.#currentState.onEnter(args);
-      this.#currentState.onEnter(args);
     }
 
     this.#isChangingState = false;
