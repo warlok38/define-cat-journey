@@ -1,12 +1,8 @@
 import * as Phaser from "phaser";
 import { SCENE_KEYS } from "./consts";
-import {
-  ASSET_KEYS,
-  ASSET_PACK_KEYS,
-  LEVEL_NAME,
-  ROOM_CODES,
-} from "../shared/consts";
+import { ASSET_KEYS, ASSET_PACK_KEYS } from "../shared/consts";
 import type { LevelData } from "../shared/types";
+import { DataManager } from "../shared/DataManager";
 
 export class PreloadScene extends Phaser.Scene {
   constructor() {
@@ -22,11 +18,10 @@ export class PreloadScene extends Phaser.Scene {
   create(): void {
     this.#createAnimations();
 
-    //TODO finish sceneData
     const sceneData: LevelData = {
-      level: LEVEL_NAME.HOUSE_1,
-      roomCode: ROOM_CODES.ENTRANCE,
-      doorId: 0,
+      level: DataManager.instance.data.currentArea.name,
+      roomCode: DataManager.instance.data.currentArea.startRoomCode,
+      doorId: DataManager.instance.data.currentArea.startDoorId,
     };
     this.scene.start(SCENE_KEYS.GAME_SCENE, sceneData);
   }

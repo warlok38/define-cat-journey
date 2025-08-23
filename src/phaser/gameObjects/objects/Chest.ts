@@ -1,10 +1,12 @@
 import { InteractiveObject } from "../../core/baseComponents";
+import { InventoryManager } from "../../core/inventory";
 import {
   ASSET_KEYS,
   CHEST_FRAME_KEYS,
   CHEST_STATE,
   INTERACTIVE_OBJECT_TYPE,
 } from "../../shared/consts";
+import { DataManager } from "../../shared/DataManager";
 import { TRAP_TYPE } from "../../shared/tiled/common";
 import type {
   ChestReward,
@@ -51,8 +53,15 @@ export class Chest
         if (!this.#isBossKeyChest) {
           return true;
         }
-
-        return false;
+        // use area information from data manager
+        if (
+          !InventoryManager.instance.getAreaInventory(
+            DataManager.instance.data.currentArea.name
+          ).bossKey
+        ) {
+          return false;
+        }
+        return true;
       },
       () => {
         this.open();

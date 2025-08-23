@@ -9,6 +9,7 @@ import {
 import { InputComponent } from "../../core/input";
 import { StateMachine } from "../../core/stateMachine";
 import { CHARACTER_STATES } from "../../shared/consts";
+import { DataManager } from "../../shared/DataManager";
 import type {
   AnimationConfig,
   CustomGameObject,
@@ -139,6 +140,10 @@ export abstract class CharacterGameObject
     }
 
     this._life.takeDamage(damage);
+    if (this._isPlayer) {
+      DataManager.instance.updatePlayerCurrentHealth(this._life.life);
+    }
+
     if (this._life.life === 0) {
       this._isDefeated = true;
       this._stateMachine.setState(CHARACTER_STATES.DEATH_STATE, direction);

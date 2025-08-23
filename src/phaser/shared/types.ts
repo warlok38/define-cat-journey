@@ -46,3 +46,30 @@ export type LevelData = {
 };
 
 export type HouseItem = keyof typeof HOUSE_ITEM;
+
+export type PlayerData = {
+  currentHealth: number;
+  maxHealth: number;
+  currentArea: {
+    name: LevelName;
+    startRoomCode: RoomCodes;
+    startDoorId: number;
+  };
+  areaDetails: {
+    [key in LevelName]: {
+      [key in RoomCodes]: {
+        chests: {
+          [key: string]: {
+            revealed: boolean;
+            opened: boolean;
+          };
+        };
+        doors: {
+          [key: string]: {
+            unlocked: boolean;
+          };
+        };
+      };
+    };
+  };
+};
