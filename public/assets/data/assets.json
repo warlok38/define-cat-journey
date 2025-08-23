@@ -1,4 +1,15 @@
 [
+   {
+    "path": "assets/fonts",
+    "files": [
+      {
+        "type": "font",
+        "key": "FONT_PRESS_START_2P",
+        "url": "PressStart2P-Regular.ttf",
+        "format": "truetype"
+      }
+    ]
+  },
   {
     "path": "assets/images/levels",
     "files": [
@@ -123,6 +134,17 @@
     ]
   },
   {
+    "path": "assets/images/hud",
+    "files": [
+      {
+        "type": "aseprite",
+        "key": "HUD_NUMBERS",
+        "textureURL": "heart_and_hud_numbers.png",
+        "atlasURL": "heart_and_hud_numbers.json"
+      }
+    ]
+  },
+  {
     "path": "assets/images/ui",
     "files": [
       {
@@ -130,6 +152,16 @@
         "key": "UI_ICONS",
         "url": "icons.png",
         "frameConfig": { "frameWidth": 16, "frameHeight": 16 }
+      },
+      {
+        "type": "image",
+        "key": "UI_DIALOG",
+        "url": "dialog_ui.png"
+      },
+      {
+        "type": "image",
+        "key": "UI_CURSOR",
+        "url": "cursor_white.png"
       }
     ]
   }

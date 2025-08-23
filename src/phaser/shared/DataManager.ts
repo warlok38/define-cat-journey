@@ -88,16 +88,20 @@ export class DataManager {
     if (health === this.#data.currentHealth) {
       return;
     }
+
     let healthUpdateType: HeroHealthUpdateType =
       HERO_HEALTH_UPDATE_TYPE.DECREASE;
+
     if (health > this.#data.currentHealth) {
       healthUpdateType = HERO_HEALTH_UPDATE_TYPE.INCREASE;
     }
+
     const dataToPass: HeroHealthUpdated = {
       previousHealth: this.#data.currentHealth,
       currentHealth: health,
       type: healthUpdateType,
     };
+
     EVENT_BUS.emit(CUSTOM_EVENTS.HERO_HEALTH_UPDATED, dataToPass);
     this.#data.currentHealth = health;
   }

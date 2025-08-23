@@ -8,6 +8,7 @@ import { Button, Chest, Door, Pot } from "../gameObjects/objects";
 import {
   ASSET_KEYS,
   CHARACTER_STATES,
+  CHEST_REWARD_TO_DIALOG_MAP,
   CHEST_REWARD_TO_TEXTURE_FRAME,
   DIRECTIONS,
   ENABLE_DEBUGGING,
@@ -106,6 +107,8 @@ export class GameScene extends Phaser.Scene {
 
     this.#registerColliders();
     this.#registerCustomEvents();
+
+    this.scene.launch(SCENE_KEYS.UI_SCENE);
   }
 
   #registerColliders(): void {
@@ -323,6 +326,7 @@ export class GameScene extends Phaser.Scene {
       this.#handleHeroDefeatedEvent,
       this
     );
+    EVENT_BUS.on(CUSTOM_EVENTS.DIALOG_CLOSED, this.#handleDialogClosed, this);
 
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       EVENT_BUS.off(CUSTOM_EVENTS.OPENED_CHEST, this.#handleOpenChest, this);
@@ -334,6 +338,11 @@ export class GameScene extends Phaser.Scene {
       EVENT_BUS.off(
         CUSTOM_EVENTS.HERO_DEFEATED,
         this.#handleHeroDefeatedEvent,
+        this
+      );
+      EVENT_BUS.off(
+        CUSTOM_EVENTS.DIALOG_CLOSED,
+        this.#handleDialogClosed,
         this
       );
     });
@@ -367,12 +376,11 @@ export class GameScene extends Phaser.Scene {
       y: this.#rewardItem.y - 16,
       duration: 500,
       onComplete: () => {
-        this.time.delayedCall(1000, () => {
-          this.#rewardItem.setVisible(false);
-        });
-        console.log(
-          InventoryManager.instance.getAreaInventory(LEVEL_NAME.HOUSE_1)
+        EVENT_BUS.emit(
+          CUSTOM_EVENTS.SHOW_DIALOG,
+          CHEST_REWARD_TO_DIALOG_MAP[chest.contents]
         );
+        this.scene.pause();
       },
     });
   }
@@ -977,10 +985,14 @@ export class GameScene extends Phaser.Scene {
     this.cameras.main.once(
       Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
       () => {
-        // this.scene.start(SCENE_KEYS.GAME_OVER_SCENE);
-        this.scene.restart();
+        this.scene.start(SCENE_KEYS.GAME_OVER_SCENE);
       }
     );
     this.cameras.main.fadeOut(1000, 0, 0, 0);
+  }
+
+  #handleDialogClosed(): void {
+    this.#rewardItem.setVisible(false);
+    this.scene.resume();
   }
 }

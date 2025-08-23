@@ -39,6 +39,10 @@ export const ASSET_KEYS = {
   BASEMENT_BACKGROUND: "BASEMENT_BACKGROUND",
   BASEMENT_FOREGROUND: "BASEMENT_FOREGROUND",
   UI_ICONS: "UI_ICONS",
+  UI_DIALOG: "UI_DIALOG",
+  UI_CURSOR: "UI_CURSOR",
+  HUD_NUMBERS: "HUD_NUMBERS",
+  FONT_PRESS_START_2P: "FONT_PRESS_START_2P",
 } as const;
 
 export const DIRECTIONS = {
@@ -269,4 +273,34 @@ export const CHEST_REWARD_TO_TEXTURE_FRAME = {
   MAP: 117,
   COMPASS: 118,
   NOTHING: 126,
+} as const;
+
+export const HEART_TEXTURE_FRAME = {
+  NONE: "15",
+  FULL: "10",
+  EMPTY: "14",
+  HALF: "12",
+} as const;
+
+export const HEART_ANIMATIONS = {
+  LOSE_LAST_HALF: "heart_lose_last_half",
+  LOSE_FIRST_HALF: "heart_lost_first_half",
+};
+
+export const DEFAULT_UI_TEXT_STYLE: Phaser.Types.GameObjects.Text.TextStyle = {
+  align: "center",
+  fontFamily: ASSET_KEYS.FONT_PRESS_START_2P,
+  fontSize: 16,
+  wordWrap: { width: 170 },
+  color: "#FFFFFF",
+};
+
+export const CHEST_REWARD_TO_DIALOG_MAP = {
+  SMALL_KEY: "You found a small key! You can use this to open locked doors.",
+  BOSS_KEY:
+    "You got the Big Key! This is the master key of the dungeon. It can open many locks that small keys cannot.",
+  MAP: "You got the Map! You can use it to see your current position and the rest of the dungeon (Press X).",
+  COMPASS:
+    "You fond the Compass! Now you can pinpoint the lair of the dungeon's evil master!",
+  NOTHING: "...The chest was empty!",
 } as const;
