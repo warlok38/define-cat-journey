@@ -33,7 +33,7 @@ export class InventoryManager {
         map: false,
         bossKey: false,
         compass: false,
-        keys: 0,
+        keys: 5,
       },
       BASEMENT: {
         map: false,

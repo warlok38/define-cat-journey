@@ -77,11 +77,11 @@ export class InputComponent {
     this.#actionKey = val;
   }
 
-  get isRunKeyJustDown(): boolean {
+  get isRunKeyDown(): boolean {
     return this.#runKey;
   }
 
-  set isRunKeyJustDown(val: boolean) {
+  set isRunKeyDown(val: boolean) {
     this.#runKey = val;
   }
 

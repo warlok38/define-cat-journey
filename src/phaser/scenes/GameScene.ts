@@ -92,6 +92,7 @@ export class GameScene extends Phaser.Scene {
     this.#controls = new KeyboardComponent(this.input.keyboard);
 
     this.#createLevel();
+
     if (!this.#collisionLayer || !this.#enemyCollisionLayer) {
       console.warn("Missing required collision layers for game.");
       return;
@@ -488,9 +489,9 @@ export class GameScene extends Phaser.Scene {
     chestLayerNames.forEach((layer) =>
       this.#createChests(map, layer.name, layer.roomCode)
     );
-    enemyLayerNames.forEach((layer) =>
-      this.#createEnemies(map, layer.name, layer.roomCode)
-    );
+    // enemyLayerNames.forEach((layer) =>
+    //   this.#createEnemies(map, layer.name, layer.roomCode)
+    // );
   }
 
   #setupCamera(): void {

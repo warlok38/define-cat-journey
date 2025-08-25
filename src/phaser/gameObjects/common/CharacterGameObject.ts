@@ -25,6 +25,7 @@ export type CharacterConfig = {
   inputComponent: InputComponent;
   animationConfig: AnimationConfig;
   speed: number;
+  speedFast?: number;
   id?: string;
   isPlayer: boolean;
   isInvulnerable?: boolean;
@@ -54,6 +55,7 @@ export abstract class CharacterGameObject
       assetKey,
       frame,
       speed,
+      speedFast,
       animationConfig,
       inputComponent,
       id,
@@ -69,7 +71,7 @@ export abstract class CharacterGameObject
     scene.physics.add.existing(this);
 
     this._controlsComponent = new ControlsComponent(this, inputComponent);
-    this._speed = new Speed(this, speed);
+    this._speed = new Speed(this, speed, speedFast ?? speed);
     this._direction = new Direction(this);
     this._animation = new Animation(this, animationConfig);
     this._invulnerable = new Invulnerable(
@@ -104,6 +106,10 @@ export abstract class CharacterGameObject
 
   get speed(): number {
     return this._speed.speed;
+  }
+
+  get speedFast(): number {
+    return this._speed.speedFast;
   }
 
   get direction(): DirectionType {

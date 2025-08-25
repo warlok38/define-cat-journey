@@ -50,8 +50,8 @@ export class KeyboardComponent extends InputComponent {
     return Phaser.Input.Keyboard.JustDown(this.#actionKey);
   }
 
-  get isRunKeyJustDown(): boolean {
-    return Phaser.Input.Keyboard.JustDown(this.#cursorKeys.shift);
+  get isRunKeyDown(): boolean {
+    return this.#cursorKeys.shift.isDown;
   }
 
   get isAttackKeyJustDown(): boolean {

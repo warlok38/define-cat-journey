@@ -73,7 +73,10 @@ export abstract class BaseMoveState extends BaseCharacterState {
       return;
     }
 
-    this._gameObject.body.velocity.normalize().scale(this._gameObject.speed);
+    const currentSpeed = this._gameObject.controls.isRunKeyDown
+      ? this._gameObject.speedFast
+      : this._gameObject.speed;
+    this._gameObject.body.velocity.normalize().scale(currentSpeed);
   }
 
   protected updateDirection(direction: DirectionType): void {

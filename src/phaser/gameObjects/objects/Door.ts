@@ -59,7 +59,7 @@ export class Door implements CustomGameObject {
       .setName(config.id.toString(10));
     this.#scene.physics.world.enable(this.#doorTransitionZone);
 
-    if (!ENABLE_DEBUGGING) {
+    if (ENABLE_DEBUGGING) {
       this.#debugDoorTransitionZone = this.#scene.add
         .rectangle(
           this.#doorTransitionZone.x,

@@ -24,6 +24,7 @@ import {
   HERO_HURT_PUSH_BACK_SPEED,
   HERO_INVULNERABLE_AFTER_HIT_DURATION,
   HERO_SPEED,
+  HERO_SPEED_FAST,
 } from "../../shared/consts";
 import type { AnimationConfig, GameObject, Position } from "../../shared/types";
 import { flash } from "../../shared/utils";
@@ -255,6 +256,7 @@ export class Hero extends CharacterGameObject {
       isPlayer: true,
       animationConfig,
       speed: HERO_SPEED,
+      speedFast: HERO_SPEED_FAST,
       inputComponent: config.controls,
       isInvulnerable: false,
       invulnerableAfterHitAnimationDuration:
