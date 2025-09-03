@@ -732,9 +732,6 @@ export class GameScene extends Phaser.Scene {
     // disable body on target door so we don't trigger transition back to original room
     targetDoor.disableObject();
 
-    // go to idle state
-    this.#hero.stateMachine.setState(CHARACTER_STATES.IDLE_STATE);
-
     const targetDirection = getDirectionOfObjectFromAnotherObject(
       door,
       targetDoor
@@ -765,6 +762,10 @@ export class GameScene extends Phaser.Scene {
       x: playerTargetPosition.x,
       duration: ROOM_TRANSITION_PLAYER_INTO_HALL_DURATION,
       delay: ROOM_TRANSITION_PLAYER_INTO_HALL_DELAY,
+      onUpdate: () => {
+        // play walk anim while transition
+        this.#hero.animation.playAnimation(`WALK_${targetDirection}`);
+      },
     });
 
     // animate camera to the next room based on the door positions
@@ -838,8 +839,14 @@ export class GameScene extends Phaser.Scene {
         this.#checkForAllEnemiesAreDefeated();
         // update camera to follow player again
         this.cameras.main.startFollow(this.#hero);
+        // play walk idle anim
+        this.#hero.animation.playAnimation(`IDLE_${targetDirection}`);
         // re-enable player input
         this.#controls.isMovementLocked = false;
+      },
+      onUpdate: () => {
+        // play walk anim while transition
+        this.#hero.animation.playAnimation(`WALK_${targetDirection}`);
       },
     });
   }
