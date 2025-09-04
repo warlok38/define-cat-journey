@@ -95,3 +95,9 @@ export function getDirectionOfObjectFromAnotherObject(
 export function isLevelName(levelName: string): levelName is LevelName {
   return levelName in LEVEL_NAME;
 }
+
+export function getVisualBottomY(
+  sprite: Phaser.GameObjects.Sprite | Phaser.GameObjects.Image
+): number {
+  return sprite.y + sprite.height * (1 - sprite.originY);
+}

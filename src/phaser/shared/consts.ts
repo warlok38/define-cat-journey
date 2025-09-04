@@ -2,6 +2,7 @@ export const ENABLE_LOGGING = false;
 export const ENABLE_DEBUGGING = false;
 
 //general
+export const DEPTH_UP = 1000;
 export const HURT_PUSH_BACK_DELAY = 200;
 
 export const THROW_ITEM_SPEED = 300;

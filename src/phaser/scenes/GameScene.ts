@@ -10,6 +10,7 @@ import {
   CHARACTER_STATES,
   CHEST_REWARD_TO_DIALOG_MAP,
   CHEST_REWARD_TO_TEXTURE_FRAME,
+  DEPTH_UP,
   DIRECTIONS,
   ENABLE_DEBUGGING,
   HERO_START_MAX_HEALTH,
@@ -370,7 +371,8 @@ export class GameScene extends Phaser.Scene {
     this.#rewardItem
       .setFrame(CHEST_REWARD_TO_TEXTURE_FRAME[chest.contents])
       .setVisible(true)
-      .setPosition(chest.x, chest.y);
+      .setPosition(chest.x, chest.y)
+      .setDepth(DEPTH_UP);
 
     this.tweens.add({
       targets: this.#rewardItem,
@@ -393,7 +395,7 @@ export class GameScene extends Phaser.Scene {
     this.add
       .image(0, 0, ASSET_KEYS[`${this.#levelData.level}_FOREGROUND`], 0)
       .setOrigin(0)
-      .setDepth(2);
+      .setDepth(DEPTH_UP);
 
     const map = this.make.tilemap({
       key: ASSET_KEYS[`${this.#levelData.level}_LEVEL`],
@@ -424,7 +426,9 @@ export class GameScene extends Phaser.Scene {
     }
 
     this.#collisionLayer = collisionLayer;
-    this.#collisionLayer.setDepth(2).setAlpha(ENABLE_DEBUGGING ? 0.5 : 0);
+    this.#collisionLayer
+      .setDepth(DEPTH_UP)
+      .setAlpha(ENABLE_DEBUGGING ? 0.5 : 0);
 
     const enemyCollisionLayer = map.createLayer(
       TILED_LAYER_NAMES.ENEMY_COLLISION,
@@ -441,7 +445,9 @@ export class GameScene extends Phaser.Scene {
       this.#enemyCollisionLayer = enemyCollisionLayer;
     }
 
-    this.#enemyCollisionLayer.setDepth(2).setAlpha(ENABLE_DEBUGGING ? 0.5 : 0);
+    this.#enemyCollisionLayer
+      .setDepth(DEPTH_UP)
+      .setAlpha(ENABLE_DEBUGGING ? 0.5 : 0);
 
     //initialize objects
     this.#objectsByRoomCode = {};

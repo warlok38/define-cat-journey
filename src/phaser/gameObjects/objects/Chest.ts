@@ -14,6 +14,7 @@ import type {
   TrapType,
 } from "../../shared/tiled/types";
 import type { ChestState, CustomGameObject } from "../../shared/types";
+import { getVisualBottomY } from "../../shared/utils";
 
 export class Chest
   extends Phaser.Physics.Arcade.Image
@@ -36,11 +37,15 @@ export class Chest
     scene.physics.add.existing(this);
     this.setOrigin(0, 1).setImmovable(true);
 
+    this.body?.setSize(16, 8, true).setOffset(1, this.height / 2);
+
     this.#state = chestState;
     this.#isBossKeyChest = config.requiresBossKey;
     this.#id = config.id;
     this.#revealTrigger = config.revealChestTrigger;
     this.#contents = config.contents;
+
+    this.setDepth(getVisualBottomY(this));
 
     if (this.#isBossKeyChest) {
       (this.body as Phaser.Physics.Arcade.Body).setSize(32, 24).setOffset(0, 8);
@@ -106,7 +111,7 @@ export class Chest
     InteractiveObject.removeComponent(this);
   }
 
-  public disableObject(): void {
+  disableObject(): void {
     // disable body on game object so we stop triggering the collision
     (this.body as Phaser.Physics.Arcade.Body).enable = false;
     // make not visible until player re-enters room
@@ -114,7 +119,7 @@ export class Chest
     this.visible = false;
   }
 
-  public enableObject(): void {
+  enableObject(): void {
     if (this.#state === CHEST_STATE.HIDDEN) {
       return;
     }
@@ -126,7 +131,7 @@ export class Chest
     this.visible = true;
   }
 
-  public reveal(): void {
+  reveal(): void {
     if (this.#state !== CHEST_STATE.HIDDEN) {
       return;
     }

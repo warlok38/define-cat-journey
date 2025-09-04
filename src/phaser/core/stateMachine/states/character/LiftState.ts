@@ -1,6 +1,7 @@
 import type { CharacterGameObject } from "../../../../gameObjects/common/CharacterGameObject";
 import {
   CHARACTER_STATES,
+  DEPTH_UP,
   ENABLE_DEBUGGING,
   LIFT_ITEM_ANIMATION_DELAY,
   LIFT_ITEM_ANIMATION_DURATION,
@@ -42,7 +43,7 @@ export class LiftState extends BaseCharacterState {
     }
 
     // have character carry the object
-    gameObjectBeingPickedUp.setDepth(2).setOrigin(0.5, 0.5);
+    gameObjectBeingPickedUp.setDepth(DEPTH_UP).setOrigin(0.5, 0.5);
 
     // create curved path for ball to follow
     const startPoint = new Phaser.Math.Vector2(

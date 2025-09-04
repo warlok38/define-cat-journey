@@ -27,7 +27,7 @@ import {
   HERO_SPEED_FAST,
 } from "../../shared/consts";
 import type { AnimationConfig, GameObject, Position } from "../../shared/types";
-import { flash } from "../../shared/utils";
+import { flash, getVisualBottomY } from "../../shared/utils";
 import { CharacterGameObject } from "../common/CharacterGameObject";
 import { Claws } from "../weapons";
 
@@ -311,10 +311,6 @@ export class Hero extends CharacterGameObject {
       },
       this
     );
-
-    this.physicsBody
-      .setSize(16, 12, true)
-      .setOffset(this.width / 2 - 7, this.height / 2 + 1);
   }
 
   get physicsBody(): Phaser.Physics.Arcade.Body {
@@ -333,5 +329,24 @@ export class Hero extends CharacterGameObject {
     super.update();
     this.#collidingObjects.reset();
     this.#weapon.update();
+    this.#calcSizeByDirection();
+
+    this.setDepth(getVisualBottomY(this));
+  }
+
+  #calcSizeByDirection(): void {
+    if (this.direction.includes("DOWN")) {
+      this.physicsBody
+        .setSize(16, 12, true)
+        .setOffset(this.width / 3 + 1, this.height / 2 + 4);
+    } else if (this.direction.includes("UP")) {
+      this.physicsBody
+        .setSize(16, 12, true)
+        .setOffset(this.width / 3 + 1, this.height / 2 + 2);
+    } else if (this.direction === "LEFT" || this.direction === "RIGHT") {
+      this.physicsBody
+        .setSize(20, 12, true)
+        .setOffset(this.width / 3 - 1, this.height / 2 + 2);
+    }
   }
 }
