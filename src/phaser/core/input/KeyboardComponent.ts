@@ -6,6 +6,7 @@ export class KeyboardComponent extends InputComponent {
   #actionKey: Phaser.Input.Keyboard.Key;
   #attackKey: Phaser.Input.Keyboard.Key;
   #enterKey: Phaser.Input.Keyboard.Key;
+  #jumpKey: Phaser.Input.Keyboard.Key;
 
   constructor(keyboardPlugin: Phaser.Input.Keyboard.KeyboardPlugin) {
     super();
@@ -15,11 +16,12 @@ export class KeyboardComponent extends InputComponent {
     this.#enterKey = keyboardPlugin.addKey(
       Phaser.Input.Keyboard.KeyCodes.ENTER
     );
+    this.#jumpKey = keyboardPlugin.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
     // e - interact
     // shift - run, move faster
     // F - attack
-    // enter = Start, Open Inventory
+    // space = jump
   }
 
   get isUpDown(): boolean {
@@ -60,5 +62,9 @@ export class KeyboardComponent extends InputComponent {
 
   get isEnterKeyJustDown(): boolean {
     return Phaser.Input.Keyboard.JustDown(this.#enterKey);
+  }
+
+  get isJumpKeyJustDown(): boolean {
+    return Phaser.Input.Keyboard.JustDown(this.#jumpKey);
   }
 }

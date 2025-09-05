@@ -15,6 +15,11 @@ export class MoveState extends BaseMoveState {
   onUpdate(): void {
     const controls = this._gameObject.controls;
 
+    if (controls.isJumpKeyJustDown) {
+      this._stateMachine.setState(CHARACTER_STATES.JUMP_STATE);
+      return;
+    }
+
     // if attack key was pressed, attack
     if (controls.isAttackKeyJustDown) {
       this._stateMachine.setState(CHARACTER_STATES.ATTACK_STATE);

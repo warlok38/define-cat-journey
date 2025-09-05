@@ -4,6 +4,7 @@ import type {
   DIRECTIONS,
   HOUSE_ITEM,
   INTERACTIVE_OBJECT_TYPE,
+  JUMP_PHASE_CODES,
   LEVEL_NAME,
   ROOM_CODES,
 } from "./consts";
@@ -38,6 +39,7 @@ export interface CustomGameObject {
 
 export type LevelName = keyof typeof LEVEL_NAME;
 export type RoomCodes = keyof typeof ROOM_CODES;
+export type JumpPhaseCodes = keyof typeof JUMP_PHASE_CODES;
 
 export type LevelData = {
   level: LevelName;

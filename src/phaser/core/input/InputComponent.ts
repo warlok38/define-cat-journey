@@ -7,6 +7,7 @@ export class InputComponent {
   #runKey: boolean;
   #attackKey: boolean;
   #enterKey: boolean;
+  #jumpKey: boolean;
   #isMovementLocked: boolean;
 
   constructor() {
@@ -18,6 +19,7 @@ export class InputComponent {
     this.#runKey = false;
     this.#attackKey = false;
     this.#enterKey = false;
+    this.#jumpKey = false;
     this.#isMovementLocked = false;
   }
 
@@ -101,6 +103,14 @@ export class InputComponent {
     this.#enterKey = val;
   }
 
+  get isJumpKeyJustDown(): boolean {
+    return this.#jumpKey;
+  }
+
+  set isJumpKeyJustDown(val: boolean) {
+    this.#jumpKey = val;
+  }
+
   public reset(): void {
     this.#isMovementLocked = false;
     this.#down = false;
@@ -111,5 +121,6 @@ export class InputComponent {
     this.#runKey = false;
     this.#attackKey = false;
     this.#enterKey = false;
+    this.#jumpKey = false;
   }
 }

@@ -36,6 +36,7 @@ export const ASSET_KEYS = {
   COLLISION: "COLLISION",
   HOUSE_1_LEVEL: "HOUSE_1_LEVEL",
   HOUSE_1_BACKGROUND: "HOUSE_1_BACKGROUND",
+  HOUSE_1_BACKGROUND_DYNAMIC: "HOUSE_1_BACKGROUND_DYNAMIC",
   HOUSE_1_FOREGROUND: "HOUSE_1_FOREGROUND",
   BASEMENT_LEVEL: "BASEMENT_LEVEL",
   BASEMENT_BACKGROUND: "BASEMENT_BACKGROUND",
@@ -89,6 +90,7 @@ export const CHARACTER_STATES = {
   MOVE_HOLDING_STATE: "MOVE_HOLDING_STATE",
   THROW_STATE: "THROW_STATE",
   ATTACK_STATE: "ATTACK_STATE",
+  JUMP_STATE: "JUMP_STATE",
 } as const;
 
 export const CHARACTER_ANIMATIONS = {
@@ -306,4 +308,9 @@ export const CHEST_REWARD_TO_DIALOG_MAP = {
   COMPASS:
     "You fond the Compass! Now you can pinpoint the lair of the dungeon's evil master!",
   NOTHING: "...The chest was empty!",
+} as const;
+
+export const JUMP_PHASE_CODES = {
+  ASCEND: "ASCEND",
+  DESCEND: "DESCEND",
 } as const;
