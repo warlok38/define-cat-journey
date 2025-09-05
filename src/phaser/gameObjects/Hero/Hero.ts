@@ -251,6 +251,7 @@ export class Hero extends CharacterGameObject {
       scene: config.scene,
       position: config.position,
       assetKey: ASSET_KEYS.HERO,
+      shadowKey: ASSET_KEYS.HERO_SHADOW,
       frame: 0,
       id: "hero",
       isPlayer: true,
@@ -264,6 +265,29 @@ export class Hero extends CharacterGameObject {
       maxLife: config.maxLife,
       currentLife: config.currentLife,
     });
+
+    //TODO need in future
+    // const fxShadow = this.postFX.addShadow(
+    //   0.64,
+    //   0,
+    //   0.1,
+    //   0.7,
+    //   0xcb92d1,
+    //   10,
+    //   0.3
+    // );
+
+    // this.postFX.addShadow(0.64, 0, 0.2, 0.5, 0xf8f1f9, 5, 0.2);
+
+    // this.scene.add.tween({
+    //   targets: fxShadow,
+    //   y: -0.2,
+    //   decay: 0.25,
+    //   intensity: 0.25,
+    //   duration: 1500,
+    //   yoyo: true,
+    //   repeat: -1,
+    // });
 
     //components
     this.#collidingObjects = new CollidingObjects(this);

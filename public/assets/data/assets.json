@@ -28,6 +28,12 @@
         "key": "HERO",
         "textureURL": "hero-cat.png",
         "atlasURL": "hero-cat.json"
+      },
+      {
+        "type": "aseprite",
+        "key": "HERO_SHADOW",
+        "textureURL": "hero-cat_shadow.png",
+        "atlasURL": "hero-cat_shadow.json"
       }
     ]
   },

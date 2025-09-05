@@ -24,6 +24,7 @@ export const ASSET_PACK_KEYS = {
 
 export const ASSET_KEYS = {
   HERO: "HERO",
+  HERO_SHADOW: "HERO_SHADOW",
   SPIDER: "SPIDER",
   WISP: "WISP",
   ENEMY_DEATH: "ENEMY_DEATH",

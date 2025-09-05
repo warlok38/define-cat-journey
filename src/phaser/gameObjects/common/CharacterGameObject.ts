@@ -32,6 +32,7 @@ export type CharacterConfig = {
   invulnerableAfterHitAnimationDuration?: number;
   maxLife: number;
   currentLife?: number;
+  shadowKey?: string;
 };
 
 export abstract class CharacterGameObject
@@ -47,6 +48,7 @@ export abstract class CharacterGameObject
   protected _life: Life;
   protected _isPlayer: boolean;
   protected _isDefeated: boolean;
+  protected _shadow?: Phaser.GameObjects.Image;
 
   constructor(config: CharacterConfig) {
     const {
@@ -64,6 +66,7 @@ export abstract class CharacterGameObject
       invulnerableAfterHitAnimationDuration,
       maxLife,
       currentLife,
+      shadowKey,
     } = config;
     super(scene, position.x, position.y, assetKey, frame || 0);
 
@@ -88,6 +91,13 @@ export abstract class CharacterGameObject
 
     if (!this._isPlayer) {
       this.disableObject();
+    }
+
+    if (shadowKey) {
+      this._shadow = scene.add
+        .image(this.x, this.y, shadowKey)
+        .setOrigin(0.5, 0.5)
+        .setDepth(this.depth - 1);
     }
   }
 
@@ -134,6 +144,7 @@ export abstract class CharacterGameObject
 
   update(): void {
     this._stateMachine.update();
+    this.#updateShadow();
   }
 
   hit(direction: DirectionType, damage: number): void {
@@ -178,5 +189,21 @@ export abstract class CharacterGameObject
     (this.body as Phaser.Physics.Arcade.Body).enable = true;
     this.active = true;
     this.visible = true;
+  }
+
+  #updateShadow(): void {
+    if (!this._shadow) {
+      return;
+    }
+
+    this._shadow.setPosition(this.x, this.y + 2);
+    this._shadow.setDepth(this.depth - 1);
+
+    const frame = this.direction
+      .split("_")
+      .map((word) => word[0])
+      .join("");
+
+    this._shadow.setFrame(frame);
   }
 }
