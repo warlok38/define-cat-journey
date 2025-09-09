@@ -96,6 +96,11 @@
         "type": "image",
         "key": "COLLISION",
         "url": "collision.png"
+      },
+      {
+        "type": "image",
+        "key": "CORNER_32",
+        "url": "corner32.png"
       }
     ]
   },

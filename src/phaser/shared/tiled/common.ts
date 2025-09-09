@@ -11,10 +11,12 @@ export const TILED_LAYER_NAMES = {
   ENEMIES: "enemies",
   COLLISION: "collision",
   ENEMY_COLLISION: "enemy_collision",
+  CORNERS: "corners",
 } as const;
 
 export const TILED_TILESET_NAMES = {
   COLLISION: "collision",
+  CORNER_32: "corner32",
 } as const;
 
 export const DOOR_TYPE = {

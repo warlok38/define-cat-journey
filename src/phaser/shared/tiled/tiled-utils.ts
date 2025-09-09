@@ -7,6 +7,7 @@ import {
   type SwitchAction,
   type SwitchTexture,
   type TiledChestObject,
+  type TiledCornerObject,
   type TiledDoorObject,
   type TiledEnemyObject,
   type TiledObjectProperty,
@@ -291,6 +292,29 @@ export function getTiledPotObjectsFromMap(
   });
 
   return potObjects;
+}
+
+/**
+ * Finds all of the valid 'Corner' Tiled Objects on a given layer of a Tilemap.
+ */
+export function getTiledCornerObjectsFromMap(
+  map: Phaser.Tilemaps.Tilemap,
+  layerName: string
+): TiledCornerObject[] {
+  const cornerObjects: TiledCornerObject[] = [];
+
+  // loop through each object and validate object has properties for the object we are planning to build
+  const tiledObjects = getTiledObjectsFromLayer(map, layerName);
+  tiledObjects.forEach((tiledObject) => {
+    cornerObjects.push({
+      x: tiledObject.x,
+      y: tiledObject.y,
+      width: tiledObject.width,
+      height: tiledObject.height,
+    });
+  });
+
+  return cornerObjects;
 }
 
 /**

@@ -4,17 +4,15 @@ import { InventoryManager } from "../core/inventory";
 import { Hero } from "../gameObjects";
 import { CharacterGameObject } from "../gameObjects/common/CharacterGameObject";
 import { Spider, Wisp } from "../gameObjects/NPCs/enemies";
-import { Button, Chest, Door, Pot } from "../gameObjects/objects";
+import { Button, Chest, Corner, Door, Pot } from "../gameObjects/objects";
 import {
   ASSET_KEYS,
-  CHARACTER_STATES,
   CHEST_REWARD_TO_DIALOG_MAP,
   CHEST_REWARD_TO_TEXTURE_FRAME,
   DEPTH_UP,
   DIRECTIONS,
   ENABLE_DEBUGGING,
   HERO_START_MAX_HEALTH,
-  LEVEL_NAME,
   ROOM_TRANSITION_CAMERA_ANIMATION_DELAY,
   ROOM_TRANSITION_CAMERA_ANIMATION_DURATION,
   ROOM_TRANSITION_PLAYER_INTO_HALL_DELAY,
@@ -35,6 +33,7 @@ import {
 import {
   getAllLayerNamesWithPrefix,
   getTiledChestObjectsFromMap,
+  getTiledCornerObjectsFromMap,
   getTiledDoorObjectsFromMap,
   getTiledEnemyObjectsFromMap,
   getTiledPotObjectsFromMap,
@@ -66,6 +65,7 @@ export class GameScene extends Phaser.Scene {
       chests: Chest[];
       enemyGroup?: Phaser.GameObjects.Group;
       room: TiledRoomObject;
+      corners: Corner[];
     };
   };
   #collisionLayer!: Phaser.Tilemaps.TilemapLayer;
@@ -482,6 +482,9 @@ export class GameScene extends Phaser.Scene {
     const enemyLayerNames = rooms.filter((layer) =>
       layer.name.endsWith(`/${TILED_LAYER_NAMES.ENEMIES}`)
     );
+    const cornerLayerNames = rooms.filter((layer) =>
+      layer.name.endsWith(`/${TILED_LAYER_NAMES.CORNERS}`)
+    );
 
     switchLayerNames.forEach((layer) =>
       this.#createButtons(map, layer.name, layer.roomCode)
@@ -498,6 +501,9 @@ export class GameScene extends Phaser.Scene {
     // enemyLayerNames.forEach((layer) =>
     //   this.#createEnemies(map, layer.name, layer.roomCode)
     // );
+    cornerLayerNames.forEach((layer) =>
+      this.#createCorners(map, layer.name, layer.roomCode)
+    );
   }
 
   #setupCamera(): void {
@@ -579,6 +585,7 @@ export class GameScene extends Phaser.Scene {
         room: tiledObject,
         chestMap: {},
         doorMap: {},
+        corners: [],
       };
     });
   }
@@ -670,6 +677,19 @@ export class GameScene extends Phaser.Scene {
           chest.open();
         }
       }
+    });
+  }
+
+  #createCorners(
+    map: Phaser.Tilemaps.Tilemap,
+    layerName: string,
+    roomCode: RoomCodes
+  ): void {
+    const validTiledObjects = getTiledCornerObjectsFromMap(map, layerName);
+    validTiledObjects.forEach((tiledObject) => {
+      const corner = new Corner(this, tiledObject);
+      this.#objectsByRoomCode[roomCode].corners.push(corner);
+      this.#blockingGroup.add(corner);
     });
   }
 
